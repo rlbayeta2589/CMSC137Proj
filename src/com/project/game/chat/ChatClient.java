@@ -17,6 +17,7 @@ public class ChatClient{
         try{
             Scanner input = new Scanner(System.in);
             String serverName = args[0]; //get IP address of server from first param
+            String username = args[1];
             String message = "";
             int port = 8000;
 
@@ -32,10 +33,10 @@ public class ChatClient{
                         try{
                             InputStream inFromServer = client.getInputStream();
                             DataInputStream in = new DataInputStream(inFromServer);
-                            System.out.println("Server says " + in.readUTF());
+                            System.out.println(in.readUTF());
                         }catch(Exception e){
                             e.printStackTrace();
-                            System.out.println("in from serer Error");
+                            System.out.println("in from server Error");
                         }
                     }
                 }
@@ -44,13 +45,11 @@ public class ChatClient{
             sender.start();
 
             while(true){
-
                 message = input.nextLine();
-
                 try{
                     OutputStream outToServer = client.getOutputStream();
                     DataOutputStream out = new DataOutputStream(outToServer);
-                    out.writeUTF("Client " + client.getLocalSocketAddress()+" says: " +message);
+                    out.writeUTF(username + ": " + message);
                 }catch(Exception e){
                     e.printStackTrace();
                     System.out.println("OUt to server Error");
