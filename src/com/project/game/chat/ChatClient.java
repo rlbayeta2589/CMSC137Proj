@@ -1,67 +1,71 @@
 //package com.project.game.chat;
 
-/*
-    TODO :
-    Catching Exceptions
-    Simplify Code
-    Learn how to use package
-*/
-
-
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class ChatClient{
+public class ChatClient extends Thread{
+
+    private boolean connected = true;
+    private String username;
+    private Socket client;
+
+    public ChatClient(String serverName, String username, int port){
+
+        this.client = initializeSocket(serverName, port);
+        this.username = username;
+
+        System.out.println("SUCCESS || connection to " + client.getRemoteSocketAddress());
+    }
+
+    public void run(){
+
+        while(connected){
+            try{
+                InputStream inFromServer = client.getInputStream();
+                DataInputStream in = new DataInputStream(inFromServer);
+                System.out.println(in.readUTF());
+            }catch(Exception e){
+                System.out.println("  ERROR || server was disconnected");
+                connected = false;
+            }
+
+        }
+    }
+
+    private Socket initializeSocket(String serverName, int port){
+        try{
+            return new Socket(serverName, port);
+        }catch(IOException e){
+            System.out.println("  ERROR || initializing socket");
+            return null;
+        }
+    }
+
+    public void sendMessage(String message){
+        try{
+            OutputStream outToServer = client.getOutputStream();
+            DataOutputStream out = new DataOutputStream(outToServer);
+            out.writeUTF(this.username + ": " + message);
+        }catch(Exception e){
+            System.out.println("  ERROR || send message to server");
+        }
+    }
+
+
     public static void main(String [] args){
         try{
             Scanner input = new Scanner(System.in);
-            String serverName = args[0]; //get IP address of server from first param
-            String username = args[1];
-            String message = "";
-            int port = 8000;
+            ChatClient client = new ChatClient(args[0], args[1], 8000);
+            client.start();
+          
 
-
-            Socket client = new Socket(serverName, port);
-
-
-            System.out.println("Just connected to " + client.getRemoteSocketAddress());
-            
-            Thread sender = new Thread(){
-                public void run(){
-                    while(true){
-                        try{
-                            InputStream inFromServer = client.getInputStream();
-                            DataInputStream in = new DataInputStream(inFromServer);
-                            System.out.println(in.readUTF());
-                        }catch(Exception e){
-                            e.printStackTrace();
-                            System.out.println("in from server Error");
-                        }
-                    }
-                }
-            };
-
-            sender.start();
-
-            while(true){
-                message = input.nextLine();
-                try{
-                    OutputStream outToServer = client.getOutputStream();
-                    DataOutputStream out = new DataOutputStream(outToServer);
-                    out.writeUTF(username + ": " + message);
-                }catch(Exception e){
-                    e.printStackTrace();
-                    System.out.println("OUt to server Error");
-                }
+            while(true){         //kapag nasaloob na ng laro ang chat di na kailangan to kaya sa main
+                                // ko na lang nilagay
+                client.sendMessage(input.nextLine());
             }
-
-
-        }catch(IOException e){
-            e.printStackTrace();
-            System.out.println("Cannot find (or disconnected from) Server");
         }catch(ArrayIndexOutOfBoundsException e){
-            System.out.println("Usage: java GreetingClient <server ip> <port no.> '<your message to the server>'");
+            System.out.println("Usage: java ChatClient <server ip> <username>");
         }
     }
 }

@@ -1,13 +1,6 @@
 //package com.project.game.chat;
 
 
-/*
-    TODO :
-    Catching Exceptions
-    Simplify Code
-    Learn how to use package
-*/
-
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -15,31 +8,27 @@ import java.util.*;
 public class ChatServer extends Thread{
     private ServerSocket serverSocket;
     private HashMap<Socket,Thread> clientNodes  = new HashMap<Socket,Thread>();
+    private boolean connected = true;
 
     public ChatServer(int port) throws IOException{
         serverSocket = new ServerSocket(port);
-        //serverSocket.setSoTimeout(10000);
     }
 
     public void run(){
-        boolean connected = true;
         while(connected){
             try{
-                Socket server = serverSocket.accept();
+                System.out.println("SUCCESS || waiting for connections");
 
-                System.out.println("Just connected to " + server.getRemoteSocketAddress());
-
-                Thread receiver = createReceiver(server);
-
-                clientNodes.put(server,receiver);
-
+                Socket newClient = serverSocket.accept();
+                Thread receiver = createReceiver(newClient);
+                
+                clientNodes.put(newClient, receiver);
                 receiver.start();
 
-            }catch(Exception e){
-                e.printStackTrace();
-                //System.out.println("Input/Output Error!");
-                //possible cause: client was disconnected while waiting for input
-                break;
+                System.out.println("SUCCESS || just connected to " + newClient.getRemoteSocketAddress());
+            }catch(IOException e){
+                System.out.println("  ERROR || client was disconnected while waiting for input");
+                connected = false;
             }
         }
     }
@@ -50,28 +39,34 @@ public class ChatServer extends Thread{
             private Socket server = s;
 
             public void run(){
-                while(true){
+                while(!server.isClosed()){
                     try{
-                        DataInputStream in = new DataInputStream(server.getInputStream()); 
+                        DataInputStream in = new DataInputStream(server.getInputStream());
                         String msg = in.readUTF();
-                        System.out.println(msg);
+                        
+                        System.out.println("SUCCESS || message receive from " + server.getRemoteSocketAddress());
+
                         broadcastMessage(msg, server.getRemoteSocketAddress().toString()); 
+                    }catch(SocketException e){
+                        closeServer(server);
+                        System.out.println("  ERROR || unexpected socket close");
                     }catch(IOException e){
-                        e.printStackTrace();
-                        System.out.println("Receiver Error");
+                        closeServer(server);
+                        System.out.println("  ERROR || a client was disconnected");
                     }
                 }
             }
 
             private void broadcastMessage(String message, String address){
                 for(Socket add : clientNodes.keySet()){
+
                     if(!add.getRemoteSocketAddress().toString().equals(address)){
                         try{
                             DataOutputStream out = new DataOutputStream(add.getOutputStream());
                             out.writeUTF(message);
                         }catch(IOException e){
-                            e.printStackTrace();
-                            System.out.println("Receiver Error");
+                            clientNodes.remove(add);
+                            System.out.println("  ERROR || a client was disconnected and cannot send message");
                         }
                     }
                 }
@@ -81,20 +76,22 @@ public class ChatServer extends Thread{
         return receiver;
     }
 
+    private void closeServer(Socket server){
+        try{
+            connected = false;
+            server.close();
+        }catch(IOException e){
+            System.out.println("  ERROR || closing a server");
+        }
+    }
+
 
     public static void main(String[] args){
         try{
-            int port = 8000;
-            Thread t = new ChatServer(port);
-            t.start();
-        }catch(IOException e){
-            //e.printStackTrace();
-            System.out.println("Usage: java GreetingServer <port no.>\n"+
-                    "Make sure to use valid ports (greater than 1023)");
-        }catch(ArrayIndexOutOfBoundsException e){
-            //e.printStackTrace();
-            System.out.println("Usage: java GreetingServer <port no.>\n"+
-                    "Insufficient arguments given.");
+            ChatServer server = new ChatServer(8000);
+            server.start();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }
