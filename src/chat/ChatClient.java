@@ -1,4 +1,4 @@
-//package com.project.game.chat;
+package src.chat;
 
 import java.net.*;
 import java.io.*;
