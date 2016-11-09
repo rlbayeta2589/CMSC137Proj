@@ -1,6 +1,11 @@
-package src.chat;
+//package com.project.game.chat;
 
-
+/*
+    TODO :
+    Catching Exceptions
+    Simplify Code
+    Learn how to use package
+*/
 
 
 import java.net.*;
