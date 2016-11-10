@@ -86,12 +86,12 @@ public class ChatServer extends Thread{
     }
 
 
-    public static void main(String[] args){
+/*    public static void main(String[] args){
         try{
             ChatServer server = new ChatServer(8000);
             server.start();
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
+    }*/
 }

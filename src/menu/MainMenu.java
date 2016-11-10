@@ -1,6 +1,8 @@
 package src.menu;
 
 import src.GameGUI;
+import src.game.*;
+import src.chat.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,13 @@ public class MainMenu extends JPanel implements MouseListener{
 	private JPanel joinGame = new JPanel();
 	private JPanel quitGame = new JPanel();
 	private JPanel menu = new JPanel();	
-	
+
+	private ChatServer server;
+	private ChatClient client;
+	private static String servername;
+	private static String username;
+	private final int PORT = 8000;
+
 	public MainMenu(){
 		setLayout(null);
 		
@@ -63,6 +71,15 @@ public class MainMenu extends JPanel implements MouseListener{
 		add(background);
 	}
 
+	//////////////////////////////////
+	public static void setClientVars(String server, String uname){
+		servername = server;
+		username = uname;
+
+		System.out.println(servername);
+		System.out.println(username);
+	}////////////////////////////////
+
 	public Image resizeImage(ImageIcon img, int width, int height){
 		return (img.getImage().getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH));
 	}
@@ -70,16 +87,30 @@ public class MainMenu extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent me){
 		CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
 			if(me.getSource() == createGame) {
-				// action when create game is clicked
-				// change cards and display the the card you want
+				try{
+					GameGUI.updateCards();
+					server = new ChatServer(PORT);
+					client = new ChatClient(servername,username,PORT);
+					server.start();
+					client.start();
+					GameGUI.attachedChatClient(client);
+				}catch(Exception e){}
 
-				/* code for changing card
-					cardLayout.show(GameGUI.getCards(), "Create Game");
-					cardLayout.show(GameGUI.getCards(), "Join Game");
-				*/
+				cardLayout = (CardLayout)GameGUI.getCards().getLayout();
+				cardLayout.show(GameGUI.getCards(), "Start");
+				GameGUI.getGame().start();
 			}
 			if(me.getSource() == joinGame){
-				
+				try{
+					GameGUI.updateCards();
+					client = new ChatClient(servername,username,PORT);
+					client.start();
+					GameGUI.attachedChatClient(client);
+				}catch(Exception e){}
+
+				cardLayout = (CardLayout)GameGUI.getCards().getLayout();
+				cardLayout.show(GameGUI.getCards(), "Start");
+				GameGUI.getGame().start();
 			}
 			if(me.getSource() == quitGame){
 				System.exit(0);

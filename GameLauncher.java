@@ -1,9 +1,19 @@
 import src.GameGUI;
+import src.menu.MainMenu;
 
 public class GameLauncher {
 	
 	public static void main(String[] args) throws Exception{
-		GameGUI game = new GameGUI("<Name of Game Here>");
+
+		try{
+			String server = args[0];
+			String username = args[1];
+
+			MainMenu.setClientVars(server, username);
+			GameGUI game = new GameGUI("<Name of Game Here>");
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("Usage: java GameLauncher <server ip> <username>");
+        }
 	}
 
 }
