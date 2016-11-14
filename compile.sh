@@ -1,0 +1,3 @@
+find -name "*.java" > java.txt &&
+javac -d . @java.txt &&
+rm java.txt
