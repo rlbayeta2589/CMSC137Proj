@@ -12,10 +12,15 @@ public class GameGUI extends JFrame{
 	
 	private static ChatField chatfield;
 	private static JPanel cards = new JPanel();
+	private static JFrame frame;
 	private static Game game;
+	public static String TITLE;
 
 	public GameGUI(String title) throws Exception{
 		super(title);
+
+		frame = this;
+		TITLE = title;
 
 		cards.setLayout(new CardLayout());
 		cards.add(new MainMenu(), "Menu");
@@ -41,7 +46,7 @@ public class GameGUI extends JFrame{
 	private static JPanel instantiateGame(){
 		JPanel gamePanel = new JPanel();
 		
-		gamePanel.setLayout(new BorderLayout());
+		/*gamePanel.setLayout(new BorderLayout());
 
 		game = new Game();
 		chatfield = new ChatField();
@@ -50,6 +55,20 @@ public class GameGUI extends JFrame{
 		gamePanel.add(chatfield, BorderLayout.WEST);
 		gamePanel.setOpaque(false);
 		
+		return gamePanel;*/
+
+		gamePanel.setLayout(null);
+		game = new Game();
+		chatfield = new ChatField();
+
+		game.setBounds(0,0,1200,600);
+		chatfield.setBounds(400,400,400,200);
+
+		gamePanel.setOpaque(false);
+
+		gamePanel.add(chatfield);
+		gamePanel.add(game);
+
 		return gamePanel;
 	}
 
@@ -63,6 +82,10 @@ public class GameGUI extends JFrame{
 
 	public static void attachedChatClient(ChatClient cc){
 		chatfield.setChatClient(cc);
+	}
+
+	public static void changeTitle(String title){
+		frame.setTitle(title);
 	}
 
 	public static void updateCards() throws Exception{  // this will be used when

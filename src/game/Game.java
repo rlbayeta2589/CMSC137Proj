@@ -1,5 +1,7 @@
 package src.game;
 
+import src.GameGUI;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
@@ -68,7 +70,8 @@ public class Game extends Canvas implements Runnable {
 					
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				System.out.println("FPS: " + frames + " TICKS: " + updates);
+				GameGUI.changeTitle(GameGUI.TITLE + " (FPS:" + frames + " TICKS:" + updates + ")");
+				// System.out.println("FPS: " + frames + " TICKS: " + updates);
 				frames = 0;
 				updates = 0;
 			}

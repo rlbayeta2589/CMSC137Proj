@@ -10,7 +10,7 @@ public class GameLauncher {
 			String username = args[1];
 
 			MainMenu.setClientVars(server, username);
-			GameGUI game = new GameGUI("<Name of Game Here>");
+			GameGUI game = new GameGUI("The Boss Fight");
         }catch(ArrayIndexOutOfBoundsException e){
             System.out.println("Usage: java GameLauncher <server ip> <username>");
         }
