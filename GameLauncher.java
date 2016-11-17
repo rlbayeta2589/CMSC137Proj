@@ -8,11 +8,12 @@ public class GameLauncher {
 		try{
 			String server = args[0];
 			String username = args[1];
+			int max = Integer.parseInt(args[2]);
 
-			MainMenu.setClientVars(server, username);
+			MainMenu.setClientVars(server, username, max);
 			GameGUI game = new GameGUI("The Boss Fight");
         }catch(ArrayIndexOutOfBoundsException e){
-            System.out.println("Usage: java GameLauncher <server ip> <username>");
+            System.out.println("Usage: java GameLauncher <server ip> <username> <numberOfPlayers>");
         }
 	}
 

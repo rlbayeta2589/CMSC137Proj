@@ -6,9 +6,11 @@ import java.awt.event.*;
 public class KeyInput extends KeyAdapter{
 	
 	Handler handler;
+	Game game;
 
-	public KeyInput(Handler handler){
+	public KeyInput(Handler handler, Game game){
 		this.handler = handler;
+		this.game = game;
 	}
 
 	public void keyPressed(KeyEvent ke){
@@ -37,7 +39,10 @@ public class KeyInput extends KeyAdapter{
 							break;
 					case KeyEvent.VK_SPACE:
 						try{
-							handler.addObject(new Bullet(tempObject.getX()+80,tempObject.getY()+20, ObjectId.Bullet, 5));
+							Float tempX = tempObject.getX()+80;
+							Float tempY = tempObject.getY()+20;
+							handler.addObject(new Bullet(tempX,tempY, ObjectId.Bullet, 5));
+							game.send("PLAYER BULLET "+tempX+" "+tempY);
 						}catch(Exception e){}
 							break;
 				}

@@ -24,7 +24,7 @@ public class GameGUI extends JFrame{
 
 		cards.setLayout(new CardLayout());
 		cards.add(new MainMenu(), "Menu");
-		cards.add(instantiateGame(), "Start");
+		cards.add(instantiateGame("","",0,0), "Start");
 		/*
 			Insert more display here
 			(e.g.) the panel that will be displayed when create
@@ -43,7 +43,7 @@ public class GameGUI extends JFrame{
 		setVisible(true);
 	}
 
-	private static JPanel instantiateGame(){
+	private static JPanel instantiateGame(String username, String type, int max, int port){
 		JPanel gamePanel = new JPanel();
 		
 		/*gamePanel.setLayout(new BorderLayout());
@@ -58,11 +58,11 @@ public class GameGUI extends JFrame{
 		return gamePanel;*/
 
 		gamePanel.setLayout(null);
-		game = new Game();
+		game = new Game(username,type,max,port);
 		chatfield = new ChatField();
 
 		game.setBounds(0,0,1200,600);
-		chatfield.setBounds(400,400,400,200);
+		chatfield.setBounds(400,370,400,200);
 
 		gamePanel.setOpaque(false);
 
@@ -88,11 +88,11 @@ public class GameGUI extends JFrame{
 		frame.setTitle(title);
 	}
 
-	public static void updateCards() throws Exception{  // this will be used when
+	public static void updateCards(String username, String type, int max, int port) throws Exception{  // this will be used when
 		cards.removeAll();								// the main game card is already done
 		cards.setLayout(new CardLayout());
 		cards.add(new MainMenu(), "Menu");
-		cards.add(instantiateGame(), "Start");
+		cards.add(instantiateGame(username,type,max,port), "Start");
 		cards.setOpaque(false);
 	}
 }

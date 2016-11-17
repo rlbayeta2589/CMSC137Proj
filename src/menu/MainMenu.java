@@ -18,6 +18,7 @@ public class MainMenu extends JPanel implements MouseListener{
 	private ChatClient client;
 	private static String servername;
 	private static String username;
+	private static int maxPlayers;
 	private final int PORT = 8000;
 
 	public MainMenu(){
@@ -72,12 +73,10 @@ public class MainMenu extends JPanel implements MouseListener{
 	}
 
 	//////////////////////////////////
-	public static void setClientVars(String server, String uname){
+	public static void setClientVars(String server, String uname, int max){
 		servername = server;
 		username = uname;
-
-		System.out.println(servername);
-		System.out.println(username);
+		maxPlayers = max;
 	}////////////////////////////////
 
 	public Image resizeImage(ImageIcon img, int width, int height){
@@ -88,7 +87,7 @@ public class MainMenu extends JPanel implements MouseListener{
 		CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
 			if(me.getSource() == createGame) {
 				try{
-					GameGUI.updateCards();
+					GameGUI.updateCards(username,"SERVER",maxPlayers,PORT);
 					server = new ChatServer(PORT);
 					client = new ChatClient(servername,username,PORT);
 					server.start();
@@ -102,7 +101,7 @@ public class MainMenu extends JPanel implements MouseListener{
 			}
 			if(me.getSource() == joinGame){
 				try{
-					GameGUI.updateCards();
+					GameGUI.updateCards(username,"CLIENT",maxPlayers,PORT);
 					client = new ChatClient(servername,username,PORT);
 					client.start();
 					GameGUI.attachedChatClient(client);

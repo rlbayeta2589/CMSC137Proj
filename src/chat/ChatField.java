@@ -13,10 +13,16 @@ public class ChatField extends JPanel{
     private JScrollPane scrollArea;
     private static JTextArea messageBox;
     private static ChatClient client;
+    
+    private int hideTime = 5;
+    private boolean hidden = true;
+    private javax.swing.Timer timerLife;
 
     public ChatField(){
         super();
         setOpaque(true);
+
+        timerLife = initializeTimer();
 
         setLayout(new BorderLayout());
 
@@ -31,18 +37,19 @@ public class ChatField extends JPanel{
 
         sendingArea.add(messageField);
 
-        messageField.setOpaque(false);
-        messageBox.setOpaque(false);
-        sendingArea.setOpaque(false);
+        messageField.setBackground(new Color(0,0,0,255));
+        messageBox.setBackground(new Color(0,0,0,255));
+        sendingArea.setBackground(new Color(0,0,0,255));
+
+        messageField.setForeground(Color.WHITE);
+        messageBox.setForeground(Color.WHITE);
 
         DefaultCaret caret = (DefaultCaret) messageBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         scrollArea = new JScrollPane(messageBox);
-        scrollArea.setBackground(Color.RED);
-        scrollArea.setOpaque(false);
 
-        setSize(400,200);
+        setPreferredSize(new Dimension(400,200));
         add(scrollArea,BorderLayout.CENTER);
         add(sendingArea, BorderLayout.SOUTH);
     }
@@ -64,11 +71,29 @@ public class ChatField extends JPanel{
         return temp;
     }
 
+    private javax.swing.Timer initializeTimer(){
+        javax.swing.Timer temp = new javax.swing.Timer(1000, new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                hideTime-=1;
+                if(hideTime==0){
+                    hidden = true;
+                }
+            }
+        });
+
+        return temp;
+    }
+
     public static void displayMessage(String message){
+        messageBox.setSize(400,100);
         messageBox.append(message);
     }
 
     public static void setChatClient(ChatClient cc){
         client = cc;
+    }
+
+    public void setHidden(boolean hide){
+        hidden = hide;
     }
 }
