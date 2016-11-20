@@ -1,6 +1,6 @@
 package src;
 
-import src.menu.MainMenu;
+import src.menu.*;
 import src.game.*;
 import src.chat.*;
 
@@ -23,6 +23,7 @@ public class GameGUI extends JFrame{
 		TITLE = title;
 
 		cards.setLayout(new CardLayout());
+		cards.add(new UsernamePrompt(), "Username");
 		cards.add(new MainMenu(), "Menu");
 		cards.add(instantiateGame("","",0,0), "Start");
 		/*

@@ -41,7 +41,7 @@ public class KeyInput extends KeyAdapter{
 						try{
 							Float tempX = tempObject.getX()+80;
 							Float tempY = tempObject.getY()+20;
-							handler.addObject(new Bullet(tempX,tempY, ObjectId.Bullet, 5));
+							handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5));
 							game.send("PLAYER BULLET "+tempX+" "+tempY);
 						}catch(Exception e){}
 							break;

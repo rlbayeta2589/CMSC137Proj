@@ -73,11 +73,18 @@ public class MainMenu extends JPanel implements MouseListener{
 	}
 
 	//////////////////////////////////
-	public static void setClientVars(String server, String uname, int max){
+	public static void setClientVars(String server, int max){
 		servername = server;
-		username = uname;
 		maxPlayers = max;
 	}////////////////////////////////
+
+	public static void setMaxPlayers(int max){
+		maxPlayers = max;
+	}
+
+	public static void setUsername(String uname){
+		username = uname;
+	}
 
 	public Image resizeImage(ImageIcon img, int width, int height){
 		return (img.getImage().getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH));
