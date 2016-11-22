@@ -10,7 +10,7 @@ public class SpaceShip extends GameObject{
 
 	private Game game;
 	private String name;
-	public int width = 70, height =40;
+	public int width = 70, height =40, damage=10;
 	public float prevX, prevY;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){
@@ -35,7 +35,7 @@ public class SpaceShip extends GameObject{
 		y += velY;
 
 		if(game!=null && (prevX!=x || prevY!=y)){
-			game.send("PLAYER "+name+" "+x+" "+y);
+			game.send("PLAYER "+name+" "+x+" "+y+" "+damage);
 		}
 	}
 
@@ -50,5 +50,8 @@ public class SpaceShip extends GameObject{
 		return new Rectangle((int)x,(int)y,width,height);
 	}
 
+	public int getDamage(){
+		return this.damage;
+	}
 
 }

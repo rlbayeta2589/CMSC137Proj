@@ -6,12 +6,12 @@ import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class Bullet extends GameObject{
+public class BossBullet extends GameObject{
 
 	public int width = 6, height = 3, damage;
 	private Handler handler;
 
-	public Bullet(float x, float y, Handler handler, ObjectId id, int velX, int damage){
+	public BossBullet(float x, float y, Handler handler, ObjectId id, int velX, int damage){
 		super(x,y,id);
 		this.velX = velX;
 		this.damage = damage;
@@ -26,7 +26,7 @@ public class Bullet extends GameObject{
 	}
 
 	public void render(Graphics g){
-		g.setColor(Color.RED);
+		g.setColor(Color.GREEN);
 		g.fillRect((int)x,(int)y,width,height);
 	}
 
@@ -38,12 +38,9 @@ public class Bullet extends GameObject{
 		for(int i = 0; i < handler.object.size(); i++){
 			GameObject tempObject = handler.object.get(i);
 
-			if(tempObject.getId() == ObjectId.Boss){
+			if(tempObject.getId() == ObjectId.SpaceShip){
 				if(getBounds().intersects(tempObject.getBounds())){
 					object.remove(this);
-					Boss boss = (Boss)tempObject;
-					boss.damageBoss(damage);
-					System.out.println("Boss Health"+boss.getHealth());
 				}
 			}
 		}

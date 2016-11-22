@@ -31,7 +31,7 @@ public class Boss extends GameObject{
 	}
 
 	public Rectangle getBounds(){
-		return new Rectangle((int)x,(int)y,5,height);
+		return new Rectangle((int)x,(int)y,1,height);
 	}
 	
 	public int getHealth(){
@@ -41,4 +41,5 @@ public class Boss extends GameObject{
 	public void damageBoss(int damage){
 		health -= damage;
 	}
+
 }

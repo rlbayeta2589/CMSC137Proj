@@ -117,7 +117,7 @@ public class Server implements Runnable{
 						String pname =playerInfo[1];
 						int x = (int)Float.parseFloat(playerInfo[2].trim());
 						int y = (int)Float.parseFloat(playerInfo[3].trim());
-
+						int damage = Integer.parseInt(playerInfo[4].trim());
 						if(!pname.equals("BULLET")){
 							Player player=players.get(pname);					  
 							player.setX(x);
@@ -132,7 +132,7 @@ public class Server implements Runnable{
 						}
 
 						if(pname.equals("BULLET")){
-							inGameData += "#BULLET " + x + " " + y;
+							inGameData += "#BULLET " + x + " " + y + " " + damage;
 						}
 
 						broadcast(inGameData);

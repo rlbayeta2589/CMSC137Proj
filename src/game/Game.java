@@ -64,8 +64,7 @@ public class Game extends Canvas implements Runnable {
 		if(type=="SERVER"){
 			new Server(maxPlayers,PORT);
 		}
-		
-		handler.addObject(new Boss(Game.WIDTH-150,200,ObjectId.Boss,500));
+
 
 		client = createClientReceiver();
 		client.start();
@@ -197,6 +196,8 @@ public class Game extends Canvas implements Runnable {
 									spaceships.put(playerData[0],temp);
 								}
 							}
+
+							handler.addObject(new Boss(Game.WIDTH-150,200,ObjectId.Boss,500));
 						}
 						if (serverData.startsWith("INGAME")){
 							String[] inGameData = serverData.split("#");
@@ -207,13 +208,14 @@ public class Game extends Canvas implements Runnable {
 								String uname = playerData[0];
 								if(!uname.equals(name)){
 									if(uname.equals("BULLET")){
-										handler.addObject(new Bullet(Float.parseFloat(playerData[1]),Float.parseFloat(playerData[2]),handler,ObjectId.Bullet, 5));
+										handler.addObject(new Bullet(Float.parseFloat(playerData[1]),Float.parseFloat(playerData[2]),handler,ObjectId.Bullet,5,Integer.parseInt(playerData[3])));
 									}else{
 										SpaceShip temp = spaceships.get(uname);
 										temp.setX(Float.parseFloat(playerData[1]));
 										temp.setY(Float.parseFloat(playerData[2]));
 									}
 								}
+
 							}
 						}
 					}

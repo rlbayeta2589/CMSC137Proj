@@ -25,6 +25,20 @@ public class Handler{
 		}
 	}
 
+	public void collision(){
+		for (int i=0; i<object.size(); i++){
+			tempObject = object.get(i);
+			if(tempObject.getId() == ObjectId.Bullet){
+				Bullet temp = (Bullet) tempObject; 
+				temp.collision(object);
+			}
+			if(tempObject.getId() == ObjectId.BossBullet){
+				BossBullet temp = (BossBullet) tempObject;
+				temp.collision(object);
+			}
+		}
+	}
+
 	public void addObject(GameObject object){
 		this.object.add(object);
 	}

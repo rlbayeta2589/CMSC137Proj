@@ -4,5 +4,6 @@ public enum ObjectId{
 	Player(),
 	SpaceShip(),
 	Bullet(),
-	Boss();
+	Boss(),
+	BossBullet();
 }

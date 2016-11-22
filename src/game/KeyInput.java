@@ -20,6 +20,7 @@ public class KeyInput extends KeyAdapter{
 			GameObject tempObject = handler.object.get(i);
 
 			if(tempObject.getId() == ObjectId.SpaceShip){
+				SpaceShip tempShip = (SpaceShip) tempObject;
 				switch (key) {
 					case KeyEvent.VK_S:;
 					case KeyEvent.VK_DOWN:
@@ -41,8 +42,8 @@ public class KeyInput extends KeyAdapter{
 						try{
 							Float tempX = tempObject.getX()+80;
 							Float tempY = tempObject.getY()+20;
-							handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5));
-							game.send("PLAYER BULLET "+tempX+" "+tempY);
+							//handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5,tempShip.getDamage()));
+							game.send("PLAYER BULLET "+tempX+" "+tempY+" "+tempShip.getDamage());
 						}catch(Exception e){}
 							break;
 				}
