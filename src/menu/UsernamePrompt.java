@@ -15,14 +15,15 @@ public class UsernamePrompt extends JPanel{
 
 	public UsernamePrompt(){
 		setLayout(null);
-
+		setPreferredSize(new Dimension(1200,600));
+		
 		ImageIcon image = new ImageIcon("./src/img/mainBackground.jpg");
-		Image img = resizeImage(image, 800, 600);
+		Image img = resizeImage(image, 1200, 600);
 		JLabel background = new JLabel();
 		ImageIcon icon = new ImageIcon(img);
 		
 		background.setIcon(icon);
-		background.setBounds(0, 0, 800, 600);
+		background.setBounds(0, 0, 1200, 600);
 		background.setOpaque(false);
 
 		JLabel label = new JLabel("Enter username:");
@@ -34,8 +35,8 @@ public class UsernamePrompt extends JPanel{
 		DefaultCaret caret = (DefaultCaret) usernameField.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-        label.setBounds(250,320,300,30);
-        usernameField.setBounds(250,350,300,30);
+        label.setBounds(450,320,300,30);
+        usernameField.setBounds(450,350,300,30);
 		
 		add(label);
         add(usernameField);

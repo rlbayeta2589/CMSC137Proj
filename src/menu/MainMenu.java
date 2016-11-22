@@ -23,14 +23,15 @@ public class MainMenu extends JPanel implements MouseListener{
 
 	public MainMenu(){
 		setLayout(null);
-		
+		setPreferredSize(new Dimension(1200,600));
+
 		ImageIcon image = new ImageIcon("./src/img/mainBackground.jpg");
-		Image img = resizeImage(image, 800, 600);
+		Image img = resizeImage(image, 1200, 600);
 		JLabel background = new JLabel();
 		ImageIcon icon = new ImageIcon(img);
 		
 		background.setIcon(icon);
-		background.setBounds(0, 0, 800, 600);
+		background.setBounds(0, 0, 1200, 600);
 		background.setOpaque(false);
 		
 		image = new ImageIcon("./src/img/buttonCreate.png");
@@ -53,9 +54,9 @@ public class MainMenu extends JPanel implements MouseListener{
 		joinGame.addMouseListener(this);
 		quitGame.addMouseListener(this);
 
-		createGame.setBounds(250,50,300,90);
-		joinGame.setBounds(250,150,300,90);
-		quitGame.setBounds(680,330,100,50);
+		createGame.setBounds(450,50,300,90);
+		joinGame.setBounds(450,150,300,90);
+		quitGame.setBounds(550,300,100,50);
 
 		menu.setLayout(null);
 		menu.add(createGame);
@@ -65,7 +66,7 @@ public class MainMenu extends JPanel implements MouseListener{
 		menu.setBounds(0, 180, 800, 400);
 
 		JLabel logo = new JLabel(new ImageIcon("./src/img/gameLogo.png"));
-		logo.setBounds(100, 50, 600, 120);
+		logo.setBounds(300, 50, 600, 120);
 	
 		add(logo);
 		add(menu);

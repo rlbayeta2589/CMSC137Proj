@@ -44,6 +44,8 @@ public class Bullet extends GameObject{
 					Boss boss = (Boss)tempObject;
 					boss.damageBoss(damage);
 					System.out.println("Boss Health"+boss.getHealth());
+
+					handler.addObject(new BossBullet(Game.WIDTH-150,y,this.handler,ObjectId.BossBullet,-5,50));
 				}
 			}
 		}
