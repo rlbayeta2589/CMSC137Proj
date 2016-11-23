@@ -12,6 +12,7 @@ public class Server implements Runnable{
 	private final int WAITING_FOR_PLAYERS=3;
 
     private HashMap<String,Player> players = new HashMap<String,Player>();
+    private Player boss;
     private DatagramSocket serverSocket = null;
 	private int gameStage=WAITING_FOR_PLAYERS;
 	private boolean connected = false;
@@ -81,12 +82,13 @@ public class Server implements Runnable{
 							}
 
 							String tokens[] = playerData.split(" ");
-							Player player = new Player(tokens[1],packet.getAddress(),packet.getPort());
+							String name = tokens[1].trim();
+							Player player = new Player(name,packet.getAddress(),packet.getPort());
 							player.setX(currX);
 							player.setY(currY);
-							System.out.println("Player connected: "+tokens[1]);
-							players.put(tokens[1],player);
-							broadcast("CONNECTED "+tokens[1]);
+							System.out.println("Player connected: "+name);
+							players.put(name,player);
+							broadcast("CONNECTED "+name);
 							
 							playerCount++;
 							if (playerCount==numPlayers){
@@ -98,10 +100,16 @@ public class Server implements Runnable{
 					// System.out.println("Game State: START");
 				  	String startData = "START";
 
+				  	boss = new Player("==BOSS==",null,0);
+				  	boss.setX(Game.WIDTH-150);
+				  	boss.setY(200);
+
 					for(String name : players.keySet()){
 						Player player = players.get(name);
 						startData += "#" + name + " " + player.getX() + " " + player.getY();
 					}
+
+					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY();
 
 					broadcast(startData);
 					gameStage=IN_PROGRESS;
@@ -109,16 +117,14 @@ public class Server implements Runnable{
 				  case IN_PROGRESS:
 					  // System.out.println("Game State: IN_PROGRESS");
 					  String inGameData = "INGAME";
-
 					  if (playerData.startsWith("PLAYER")){
-					  	System.out.println(playerData);
 
 						String[] playerInfo = playerData.split(" ");					  
 						String pname =playerInfo[1];
 						int x = (int)Float.parseFloat(playerInfo[2].trim());
 						int y = (int)Float.parseFloat(playerInfo[3].trim());
 						int damage = Integer.parseInt(playerInfo[4].trim());
-						if(!pname.equals("BULLET")){
+						if(!pname.equals("BULLET") && !pname.equals("==BOSS==")){
 							Player player=players.get(pname);					  
 							player.setX(x);
 							player.setY(y);
@@ -133,6 +139,9 @@ public class Server implements Runnable{
 
 						if(pname.equals("BULLET")){
 							inGameData += "#BULLET " + x + " " + y + " " + damage;
+						}
+						if(pname.equals("==BOSS==")){
+							inGameData += "#==BOSS== " + x + " " + y + " " + damage;
 						}
 
 						broadcast(inGameData);

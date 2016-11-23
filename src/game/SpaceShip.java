@@ -41,6 +41,13 @@ public class SpaceShip extends GameObject{
 
 	public void render(Graphics g){
 		ImageIcon ship = new ImageIcon("./src/img/spaceship.png");
+
+		if(this.id!=null){
+			ship = new ImageIcon("./src/img/spaceship_p1.png");
+		}else{
+			ship = new ImageIcon("./src/img/spaceship_pX.png");
+		}
+		
 		Image newIMG = Util.resizeImage(ship,width,height);
 		ship = new ImageIcon(newIMG);
 		g.drawImage(ship.getImage(),(int)x,(int)y,null);	

@@ -42,7 +42,7 @@ public class KeyInput extends KeyAdapter{
 						try{
 							Float tempX = tempObject.getX()+80;
 							Float tempY = tempObject.getY()+20;
-							//handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5,tempShip.getDamage()));
+							handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5,tempShip.getDamage()));
 							game.send("PLAYER BULLET "+tempX+" "+tempY+" "+tempShip.getDamage());
 						}catch(Exception e){}
 							break;
