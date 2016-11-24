@@ -44,7 +44,7 @@ public class Bullet extends GameObject{
 					Boss boss = (Boss)tempObject;
 					boss.damageBoss(damage);
 
-					System.out.println("Boss Health "+boss.getHealth());
+					// System.out.println("Boss Health "+boss.getHealth());
 				}
 			}
 		}

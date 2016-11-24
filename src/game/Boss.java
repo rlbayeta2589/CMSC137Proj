@@ -11,7 +11,8 @@ public class Boss extends GameObject{
 	private final int UP = 1, DOWN = 2, STAY = 3;
 	private Random random = new Random();
 	private Game game;
-	public int width = 150, height = 200, health, damage = 10;
+	public int width = 150, height = 200, damage = 10;
+	public int health, orig_health;
 	public boolean moving = false;
 	public float prevX, prevY;
 	public float destination;
@@ -20,6 +21,7 @@ public class Boss extends GameObject{
 	public Boss(float x, float y, ObjectId id, int health,Game game, String utype){
 		super(x,y,id);
 		this.health = health;
+		this.orig_health = health;
 		this.game = game;
 
 		if(utype=="SERVER"){
@@ -51,9 +53,17 @@ public class Boss extends GameObject{
 
 	public void render(Graphics g){
 		ImageIcon ship = new ImageIcon("./src/img/boss.png");
-		Image newIMG = Util.resizeImage(ship,width,height);
+		Image newIMG = Util.resizeImage(ship,width-20,height);
 		ship = new ImageIcon(newIMG);
 		g.drawImage(ship.getImage(),(int)x,(int)y,null);
+		
+
+		float percent_health = ((float)health/orig_health)*height;
+
+		g.setColor(Color.GREEN);
+		g.fillRect((int)x + (width-20),(int)y+(height-(int)percent_health),width,(int)percent_health);
+		g.setColor(Color.BLUE);
+		g.drawRect((int)x + (width-20),(int)y,width,height);
 	}
 
 	public Thread createMovements(){
