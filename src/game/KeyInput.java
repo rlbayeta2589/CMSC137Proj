@@ -1,5 +1,7 @@
 package src.game;
 
+import src.chat.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -47,6 +49,9 @@ public class KeyInput extends KeyAdapter{
 							handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5,tempShip.getDamage()));
 							game.send("BULLET "+name+" "+tempX+" "+tempY+" "+tempShip.getDamage());
 						}catch(Exception e){}
+							break;
+					case KeyEvent.VK_ENTER:
+							ChatField.focusOnChat();
 							break;
 				}
 			}

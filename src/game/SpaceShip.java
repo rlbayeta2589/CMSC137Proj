@@ -10,7 +10,7 @@ public class SpaceShip extends GameObject{
 
 	private Game game;
 	private String name;
-	public int width = 70, height =40, damage=10;
+	public int width = 70, height =40, damage=10, health=250;
 	public float prevX, prevY;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){

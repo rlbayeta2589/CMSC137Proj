@@ -10,6 +10,7 @@ import java.awt.event.*;
 
 public class GameGUI extends JFrame{
 	
+	private static StatField statField;
 	private static ChatField chatfield;
 	private static JPanel cards = new JPanel();
 	private static JFrame frame;
@@ -47,19 +48,25 @@ public class GameGUI extends JFrame{
 
 	private static JPanel instantiateGame(String username, String type, int max, int port){
 		JPanel gamePanel = new JPanel();
-		
-		/*gamePanel.setLayout(new BorderLayout());
+		JPanel westPanel = new JPanel();
 
-		game = new Game();
+		gamePanel.setLayout(new BorderLayout());
+		westPanel.setLayout(new BorderLayout());
+
+		game = new Game(username,type,max,port);
 		chatfield = new ChatField();
+		statField = new StatField(username);
+
+		westPanel.add(statField, BorderLayout.NORTH);
+		westPanel.add(chatfield, BorderLayout.CENTER);
 
 		gamePanel.add(game,BorderLayout.CENTER);
-		gamePanel.add(chatfield, BorderLayout.WEST);
+		gamePanel.add(westPanel, BorderLayout.WEST);
 		gamePanel.setOpaque(false);
 		
-		return gamePanel;*/
+		return gamePanel;
 
-		gamePanel.setLayout(null);
+/*		gamePanel.setLayout(null);
 		game = new Game(username,type,max,port);
 		chatfield = new ChatField();
 
@@ -72,6 +79,10 @@ public class GameGUI extends JFrame{
 		gamePanel.add(game);
 
 		return gamePanel;
+*/	}
+
+	public static void focusOnGame(){
+		game.requestFocusInWindow();
 	}
 
 	public static Game getGame(){

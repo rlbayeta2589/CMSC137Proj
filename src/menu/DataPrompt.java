@@ -125,6 +125,29 @@ public class DataPrompt extends JPanel implements MouseListener{
 		return (img.getImage().getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH));
 	}
 
+	public void showPrompt(String type){
+		ImageIcon image = new ImageIcon("./src/img/incompleteData.png");
+
+		if(type.equals("DATA")){
+			image = new ImageIcon("./src/img/incompleteData.png");
+		}else if(type.equals("MAX")){
+			image = new ImageIcon("./src/img/invalidMax.png");
+		}else if(type.equals("NAME")){
+			image = new ImageIcon("./src/img/invalidName.png");
+		}
+
+		Image img = resizeImage(image, 250, 60);
+		((JLabel)(prompt.getComponent(0))).setIcon(new ImageIcon(img));
+
+		prompt.setVisible(true);
+
+		new java.util.Timer().schedule(new TimerTask(){
+			public void run(){
+				prompt.setVisible(false);
+			}
+		},1500);
+	}
+
 	public void mouseClicked(MouseEvent me){
 		if(me.getSource() == play){
 			String uname = usernameField.getText().trim();
@@ -135,19 +158,27 @@ public class DataPrompt extends JPanel implements MouseListener{
 			}
 
 			if((uname.equals("") || ip.equals("")) || (type.equals("SERVER") && max.equals(""))){
-				prompt.setVisible(true);
-
-				new java.util.Timer().schedule(new TimerTask(){
-					public void run(){
-						prompt.setVisible(false);
-					}
-				},1500);
+				showPrompt("DATA");
+				return;
 			}else{
 				if(max.equals("")) max = "0";
 
-				MainMenu.setUsername(uname);
-				MainMenu.setClientVars(ip,Integer.parseInt(max));
-				MainMenu.gameStart(type);
+				if(uname.split(" ").length>1){
+					showPrompt("NAME");
+					return;
+				}
+
+				try{
+					
+					MainMenu.setUsername(uname);
+					MainMenu.setClientVars(ip,Integer.parseInt(max));
+					MainMenu.gameStart(type);
+				
+				}catch(NumberFormatException e){
+					showPrompt("MAX");
+					return;
+				}
+
 			}
 		}
 	}

@@ -87,6 +87,7 @@ public class MainMenu extends JPanel implements MouseListener{
 	}
 
 	public static void setUsername(String uname){
+		GameGUI.TITLE = GameGUI.TITLE + "<"+uname+"> ";
 		username = uname;
 	}
 
