@@ -109,7 +109,7 @@ public class Server implements Runnable{
 						startData += "#" + name + " " + player.getX() + " " + player.getY();
 					}
 
-					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*2500);
+					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*500);
 
 					broadcast(startData);
 					gameStage=IN_PROGRESS;
