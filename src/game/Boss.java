@@ -70,7 +70,7 @@ public class Boss extends GameObject{
         Thread movement = new Thread() {
 
             public void run(){
-            	while(health != 0){
+            	while(health > 0){
 
             		try{
             			Thread.sleep(800);

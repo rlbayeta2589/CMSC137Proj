@@ -12,6 +12,7 @@ public class SpaceShip extends GameObject{
 	private String name;
 	public int width = 70, height =40, damage=10, health=250;
 	public float prevX, prevY;
+	public boolean dead = false;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){
 		super(x,y,id);
@@ -42,7 +43,14 @@ public class SpaceShip extends GameObject{
 	public void render(Graphics g){
 		ImageIcon ship = new ImageIcon("./src/img/spaceship.png");
 
-		if(this.id!=null){
+		if(dead){
+			ship = new ImageIcon("./src/img/explosion.png");
+			Image newIMG = Util.resizeImage(ship,width,height);
+			ship = new ImageIcon(newIMG);
+			g.drawImage(ship.getImage(),(int)x,(int)y,null);
+			return;
+
+		}else if(this.id!=null){
 			ship = new ImageIcon("./src/img/spaceship_p1.png");
 		}else{
 			ship = new ImageIcon("./src/img/spaceship_pX.png");
@@ -61,4 +69,29 @@ public class SpaceShip extends GameObject{
 		return this.damage;
 	}
 
+	public void explode(){
+		dead = true;
+	}
+
+	public boolean isDead(){
+		return this.dead;
+	}
+
+	public void damageSpaceShip(int indmg){
+		SpaceShip temp = this;
+		health = health - indmg;
+		if(health<=0){
+			health = 0;
+			dead = true;
+
+			game.send("DEAD "+name);
+
+			new java.util.Timer().schedule(new TimerTask(){
+				public void run(){
+					game.getHandler().removeObject(temp);
+				}
+			},3000);
+		}
+		StatField.setHealth(health);
+	}
 }

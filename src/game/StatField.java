@@ -60,7 +60,7 @@ public class StatField extends JPanel{
     }
 
     public static void setScore(int score){
-        healthField.setText(score+"");
+        scoreField.setText(score+"");
     }
 
 }

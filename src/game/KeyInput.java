@@ -19,12 +19,12 @@ public class KeyInput extends KeyAdapter{
 
 	public void keyPressed(KeyEvent ke){
 		int key = ke.getKeyCode();
-
 		for(int i=0; i<handler.object.size(); i++){
 			GameObject tempObject = handler.object.get(i);
 
 			if(tempObject.getId() == ObjectId.SpaceShip){
 				SpaceShip tempShip = (SpaceShip) tempObject;
+				if(tempShip.isDead()) return;
 				switch (key) {
 					case KeyEvent.VK_S:;
 					case KeyEvent.VK_DOWN:

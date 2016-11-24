@@ -14,7 +14,7 @@ public class BossBullet extends GameObject{
 	public BossBullet(float x, float y, Handler handler, ObjectId id, int velX){
 		super(x,y,id);
 		this.velX = velX;
-		this.damage = damage;
+		this.damage = 50;
 		this.handler = handler;
 	}
 
@@ -39,6 +39,11 @@ public class BossBullet extends GameObject{
 			GameObject tempObject = handler.object.get(i);
 
 			if(tempObject.getId() == ObjectId.SpaceShip){
+				if(getBounds().intersects(tempObject.getBounds())){
+					object.remove(this);
+					((SpaceShip)tempObject).damageSpaceShip(damage);
+				}
+			}else if(tempObject.getId() == null){
 				if(getBounds().intersects(tempObject.getBounds())){
 					object.remove(this);
 				}

@@ -109,21 +109,25 @@ public class Server implements Runnable{
 						startData += "#" + name + " " + player.getX() + " " + player.getY();
 					}
 
-					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY();
+					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*2500);
 
 					broadcast(startData);
 					gameStage=IN_PROGRESS;
 					break;
 				  case IN_PROGRESS:
 						String inGameData = "INGAME";
-						
+						int x=0, y=0, damage=0;
+
 						if(playerData.equals("")) break;
 
 						String[] playerInfo = playerData.split(" ");					  
 						String pname = playerInfo[1];
-						int x = (int)Float.parseFloat(playerInfo[2].trim());
-						int y = (int)Float.parseFloat(playerInfo[3].trim());
-						int damage = Integer.parseInt(playerInfo[4].trim());
+
+						try{
+							x = (int)Float.parseFloat(playerInfo[2].trim());
+							y = (int)Float.parseFloat(playerInfo[3].trim());
+							damage = Integer.parseInt(playerInfo[4].trim());
+						}catch(Exception e){}
 
 						if (playerData.startsWith("PLAYER")){
 							inGameData += "#PLAYER#" + pname + "#" + x + "#" + y + "#" + damage;
@@ -133,6 +137,8 @@ public class Server implements Runnable{
 							inGameData += "#BOSS#" + x + "#" + y + "#" + damage;
 						}else if(playerData.startsWith("BULLET")){
 							inGameData += "#BULLET#" + pname + "#" + x + "#" + y + "#" + damage;
+						}else if(playerData.startsWith("DEAD")){
+							inGameData += "#DEAD#" + pname;
 						}
 
 						broadcast(inGameData);
