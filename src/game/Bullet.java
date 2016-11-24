@@ -43,6 +43,7 @@ public class Bullet extends GameObject{
 					object.remove(this);
 					Boss boss = (Boss)tempObject;
 					boss.damageBoss(damage);
+
 					System.out.println("Boss Health "+boss.getHealth());
 				}
 			}
