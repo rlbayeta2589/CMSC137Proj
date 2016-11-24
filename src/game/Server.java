@@ -86,8 +86,9 @@ public class Server implements Runnable{
 							Player player = new Player(name,packet.getAddress(),packet.getPort());
 							player.setX(currX);
 							player.setY(currY);
-							System.out.println("Player connected: "+name);
 							players.put(name,player);
+
+							System.out.println("Player connected: "+name);
 							broadcast("CONNECTED "+name);
 							
 							playerCount++;
@@ -97,7 +98,6 @@ public class Server implements Runnable{
 						}
 					  break;	
 				  case GAME_START:
-					// System.out.println("Game State: START");
 				  	String startData = "START";
 
 				  	boss = new Player("==BOSS==",null,0);
@@ -115,38 +115,28 @@ public class Server implements Runnable{
 					gameStage=IN_PROGRESS;
 					break;
 				  case IN_PROGRESS:
-					  // System.out.println("Game State: IN_PROGRESS");
-					  String inGameData = "INGAME";
-					  if (playerData.startsWith("PLAYER")){
+						String inGameData = "INGAME";
+						
+						if(playerData.equals("")) break;
 
 						String[] playerInfo = playerData.split(" ");					  
-						String pname =playerInfo[1];
+						String pname = playerInfo[1];
 						int x = (int)Float.parseFloat(playerInfo[2].trim());
 						int y = (int)Float.parseFloat(playerInfo[3].trim());
 						int damage = Integer.parseInt(playerInfo[4].trim());
-						if(!pname.equals("BULLET") && !pname.equals("==BOSS==")){
-							Player player=players.get(pname);					  
-							player.setX(x);
-							player.setY(y);
 
-						  	players.put(pname,player);
-					  	}
-
-					  	for(String name : players.keySet()){
-							Player temp = players.get(name);
-							inGameData += "#" + name + " " + temp.getX() + " " + temp.getY();
-						}
-
-						if(pname.equals("BULLET")){
-							inGameData += "#BULLET " + x + " " + y + " " + damage;
-						}
-						if(pname.equals("==BOSS==")){
-							inGameData += "#==BOSS== " + x + " " + y + " " + damage;
+						if (playerData.startsWith("PLAYER")){
+							inGameData += "#PLAYER#" + pname + "#" + x + "#" + y + "#" + damage;
+						}else if(playerData.startsWith("BOSSBULLET")){
+							inGameData += "#BOSSBULLET#"+ x + "#" + y + "#" + damage;
+						}else if(playerData.startsWith("BOSS")){
+							inGameData += "#BOSS#" + x + "#" + y + "#" + damage;
+						}else if(playerData.startsWith("BULLET")){
+							inGameData += "#BULLET#" + pname + "#" + x + "#" + y + "#" + damage;
 						}
 
 						broadcast(inGameData);
-					  }
-					  break;
+						break;
 			}				  
 		}
 	}	

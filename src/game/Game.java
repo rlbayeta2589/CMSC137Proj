@@ -70,7 +70,7 @@ public class Game extends Canvas implements Runnable {
 		client = createClientReceiver();
 		client.start();
 
-		this.addKeyListener(new KeyInput(handler,game));
+		this.addKeyListener(new KeyInput(handler,game,name));
 	}
 
 	public synchronized void start(){
@@ -199,27 +199,36 @@ public class Game extends Canvas implements Runnable {
 
 						}
 						if (serverData.startsWith("INGAME")){
+							// System.out.println(serverData);
 							String[] inGameData = serverData.split("#");
 
-							for(int i=1;i<inGameData.length;i++){
-								// System.out.println(inGameData[i]);
-								String[] playerData = inGameData[i].split(" ");
-								String uname = playerData[0].trim();
+							String dataType = inGameData[1];
+
+							if(dataType.equals("PLAYER")){
+								String uname = inGameData[2];
 								if(!uname.equals(name)){
-
-									if(uname != "BULLET" && uname != "==BOSS=="){
-										SpaceShip temp = spaceships.get(uname);
-										temp.setX(Float.parseFloat(playerData[1]));
-										temp.setY(Float.parseFloat(playerData[2]));
-									}else if(uname.equals("BULLET")){
-										handler.addObject(new Bullet(Float.parseFloat(playerData[1]),Float.parseFloat(playerData[2]),handler,ObjectId.Bullet,5,Integer.parseInt(playerData[3])));
-									}else if(uname.equals("==BOSS==") && !type.equals("SERVER")){
-										boss.setX(Float.parseFloat(playerData[1]));
-										boss.setY(Float.parseFloat(playerData[2]));
-									}
+									SpaceShip temp = spaceships.get(inGameData[2]);
+									temp.setX(Float.parseFloat(inGameData[3]));
+									temp.setY(Float.parseFloat(inGameData[4]));
 								}
-
+							}else if(dataType.equals("BULLET")){
+								String uname = inGameData[2];
+								if(!uname.equals(name)){
+									float xxx = Float.parseFloat(inGameData[3]);
+									float yyy = Float.parseFloat(inGameData[4]);
+									int dmg = Integer.parseInt(inGameData[5]);
+									handler.addObject(new Bullet(xxx,yyy,handler,ObjectId.Bullet,5,dmg));
+								}
+							}else if(dataType.equals("BOSS") && !type.equals("SERVER")){
+								boss.setX(Float.parseFloat(inGameData[2]));
+								boss.setY(Float.parseFloat(inGameData[3]));
+							}else if(dataType.equals("BOSSBULLET") && !type.equals("SERVER")){
+								System.out.println("BOSS BULLET");
+								float xxx = Float.parseFloat(inGameData[2]);
+								float yyy = Float.parseFloat(inGameData[3]);
+								handler.addObject(new BossBullet(xxx,yyy,handler,ObjectId.BossBullet, -2));
 							}
+
 						}
 					}
 	            }
@@ -227,5 +236,9 @@ public class Game extends Canvas implements Runnable {
         };
 
         return receiver;
+    }
+
+    public Handler getHandler(){
+    	return this.handler;
     }
 }

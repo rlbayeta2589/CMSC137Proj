@@ -23,8 +23,9 @@ public class GameGUI extends JFrame{
 		TITLE = title;
 
 		cards.setLayout(new CardLayout());
-		cards.add(new UsernamePrompt(), "Username");
 		cards.add(new MainMenu(), "Menu");
+		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
+		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
 		cards.add(instantiateGame("","",0,0), "Start");
 		/*
 			Insert more display here
@@ -93,6 +94,8 @@ public class GameGUI extends JFrame{
 		cards.removeAll();								// the main game card is already done
 		cards.setLayout(new CardLayout());
 		cards.add(new MainMenu(), "Menu");
+		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
+		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
 		cards.add(instantiateGame(username,type,max,port), "Start");
 		cards.setOpaque(false);
 	}

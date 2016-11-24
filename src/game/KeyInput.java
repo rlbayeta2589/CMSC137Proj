@@ -7,10 +7,12 @@ public class KeyInput extends KeyAdapter{
 	
 	Handler handler;
 	Game game;
+	String name;
 
-	public KeyInput(Handler handler, Game game){
+	public KeyInput(Handler handler, Game game, String name){
 		this.handler = handler;
 		this.game = game;
+		this.name = name;
 	}
 
 	public void keyPressed(KeyEvent ke){
@@ -43,7 +45,7 @@ public class KeyInput extends KeyAdapter{
 							Float tempX = tempObject.getX()+80;
 							Float tempY = tempObject.getY()+20;
 							handler.addObject(new Bullet(tempX,tempY,this.handler,ObjectId.Bullet, 5,tempShip.getDamage()));
-							game.send("PLAYER BULLET "+tempX+" "+tempY+" "+tempShip.getDamage());
+							game.send("BULLET "+name+" "+tempX+" "+tempY+" "+tempShip.getDamage());
 						}catch(Exception e){}
 							break;
 				}

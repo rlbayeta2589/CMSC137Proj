@@ -14,23 +14,23 @@ public class MainMenu extends JPanel implements MouseListener{
 	private JPanel quitGame = new JPanel();
 	private JPanel menu = new JPanel();	
 
-	private ChatServer server;
-	private ChatClient client;
+	private static ChatServer server;
+	private static ChatClient client;
 	private static String servername;
 	private static String username;
 	private static int maxPlayers;
-	private final int PORT = 8000;
+	private static final int PORT = 8000;
 
 	public MainMenu(){
 		setLayout(null);
 		
 		ImageIcon image = new ImageIcon("./src/img/mainBackground.jpg");
-		Image img = resizeImage(image, 800, 600);
+		Image img = resizeImage(image, 1200, 600);
 		JLabel background = new JLabel();
 		ImageIcon icon = new ImageIcon(img);
 		
 		background.setIcon(icon);
-		background.setBounds(0, 0, 800, 600);
+		background.setBounds(0, 0, 1200, 600);
 		background.setOpaque(false);
 		
 		image = new ImageIcon("./src/img/buttonCreate.png");
@@ -55,17 +55,17 @@ public class MainMenu extends JPanel implements MouseListener{
 
 		createGame.setBounds(250,50,300,90);
 		joinGame.setBounds(250,150,300,90);
-		quitGame.setBounds(680,330,100,50);
+		quitGame.setBounds(680,300,100,50);
 
 		menu.setLayout(null);
 		menu.add(createGame);
 		menu.add(joinGame);
 		menu.add(quitGame);
 		menu.setOpaque(false);
-		menu.setBounds(0, 180, 800, 400);
+		menu.setBounds(200, 200, 800, 400);
 
 		JLabel logo = new JLabel(new ImageIcon("./src/img/gameLogo.png"));
-		logo.setBounds(100, 50, 600, 120);
+		logo.setBounds(300, 80, 600, 180);
 	
 		add(logo);
 		add(menu);
@@ -90,33 +90,34 @@ public class MainMenu extends JPanel implements MouseListener{
 		return (img.getImage().getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH));
 	}
 	
+	public static void gameStart(String utype){
+		CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
+		
+		try{
+			GameGUI.updateCards(username,utype,maxPlayers,PORT);
+			if(utype.equals("SERVER")){
+				server = new ChatServer(PORT);
+				server.start();
+			}
+			client = new ChatClient(servername,username,PORT);
+			client.start();
+			GameGUI.attachedChatClient(client);
+		}catch(Exception e){}
+
+		cardLayout = (CardLayout)GameGUI.getCards().getLayout();
+		cardLayout.show(GameGUI.getCards(), "Start");
+		GameGUI.getGame().start();
+	}
+
 	public void mouseClicked(MouseEvent me){
 		CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
 			if(me.getSource() == createGame) {
-				try{
-					GameGUI.updateCards(username,"SERVER",maxPlayers,PORT);
-					server = new ChatServer(PORT);
-					client = new ChatClient(servername,username,PORT);
-					server.start();
-					client.start();
-					GameGUI.attachedChatClient(client);
-				}catch(Exception e){}
-
 				cardLayout = (CardLayout)GameGUI.getCards().getLayout();
-				cardLayout.show(GameGUI.getCards(), "Start");
-				GameGUI.getGame().start();
+				cardLayout.show(GameGUI.getCards(), "DataPromptServer");
 			}
 			if(me.getSource() == joinGame){
-				try{
-					GameGUI.updateCards(username,"CLIENT",maxPlayers,PORT);
-					client = new ChatClient(servername,username,PORT);
-					client.start();
-					GameGUI.attachedChatClient(client);
-				}catch(Exception e){}
-
 				cardLayout = (CardLayout)GameGUI.getCards().getLayout();
-				cardLayout.show(GameGUI.getCards(), "Start");
-				GameGUI.getGame().start();
+				cardLayout.show(GameGUI.getCards(), "DataPromptClient");
 			}
 			if(me.getSource() == quitGame){
 				System.exit(0);

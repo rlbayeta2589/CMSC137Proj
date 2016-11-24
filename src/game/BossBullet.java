@@ -8,10 +8,10 @@ import java.util.*;
 
 public class BossBullet extends GameObject{
 
-	public int width = 6, height = 3, damage;
+	public int width = 10, height = 5, damage;
 	private Handler handler;
 
-	public BossBullet(float x, float y, Handler handler, ObjectId id, int velX, int damage){
+	public BossBullet(float x, float y, Handler handler, ObjectId id, int velX){
 		super(x,y,id);
 		this.velX = velX;
 		this.damage = damage;
@@ -19,14 +19,14 @@ public class BossBullet extends GameObject{
 	}
 
 	public void tick(LinkedList<GameObject> object){
-		if(x+velX>=Game.WIDTH) object.remove(this);
+		if(x+velX<=-1*width) object.remove(this);
 		x += velX;
 		
 		collision(object);
 	}
 
 	public void render(Graphics g){
-		g.setColor(Color.GREEN);
+		g.setColor(new Color(66,133,255));
 		g.fillRect((int)x,(int)y,width,height);
 	}
 

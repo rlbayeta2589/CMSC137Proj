@@ -11,7 +11,7 @@ public class Boss extends GameObject{
 	private final int UP = 1, DOWN = 2, STAY = 3;
 	private Random random = new Random();
 	private Game game;
-	public int width = 150, height = 200, health;
+	public int width = 150, height = 200, health, damage = 10;
 	public boolean moving = false;
 	public float prevX, prevY;
 	public float destination;
@@ -45,7 +45,7 @@ public class Boss extends GameObject{
 		if(moving) y += velY;
 
 		if(game!=null && prevY!=y){
-			game.send("PLAYER ==BOSS== "+x+" "+y+" 0");
+			game.send("BOSS BOSS "+x+" "+y+" 0");
 		}
 	}
 
@@ -79,6 +79,11 @@ public class Boss extends GameObject{
 							setVelY(-2);
 							direction = UP;
 						}
+            		}else{
+            			Handler hand = game.getHandler();
+            			float bulletStart = y+(height/2);
+						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet, -2));
+						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" 0");
             		}
             	}
             }

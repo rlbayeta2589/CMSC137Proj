@@ -25,8 +25,8 @@ public class SpaceShip extends GameObject{
 	public void tick(LinkedList<GameObject> object){
 		if(x+velX<=5) x = 5;
 		if(y+velY<=5) y = 5;
-		if(x+width+velX>=Game.WIDTH) x = Game.WIDTH - width - 5;
-		if(y+height+velY>=Game.HEIGHT) y = Game.HEIGHT - height - 5;
+		if(x+width+velX>= Game.WIDTH 	) x = Game.WIDTH - width - 5;
+		if(y+height+velY>=Game.HEIGHT-35) y = Game.HEIGHT - height - velY - 35;
 
 		prevX = x;
 		prevY = y;
