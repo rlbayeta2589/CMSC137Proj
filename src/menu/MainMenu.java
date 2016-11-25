@@ -99,7 +99,7 @@ public class MainMenu extends JPanel implements MouseListener{
 		CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
 		
 		try{
-			GameGUI.updateCards(username,utype,maxPlayers,PORT);
+			GameGUI.updateCards(username,utype,maxPlayers,servername,PORT);
 			if(utype.equals("SERVER")){
 				server = new ChatServer(PORT);
 				server.start();

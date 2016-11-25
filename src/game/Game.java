@@ -37,17 +37,17 @@ public class Game extends Canvas implements Runnable {
 
 	private JLabel bossHealth;
 
-	public Game(String uname, String utype, int max, int port){
+	public Game(String uname, String utype, int max, String servername, int port){
 		super();
 		name = uname;
 		type = utype;
 		game = this;
 		maxPlayers = max;
+		server = servername;
 		PORT = port;
 
 		try{
 			socket = new DatagramSocket();
-			socket.setSoTimeout(100);
 		}catch(Exception e){
 			System.out.println("ERROR");
 		}
@@ -152,7 +152,7 @@ public class Game extends Canvas implements Runnable {
 
             public synchronized void run(){
 				while(true){
-					byte[] buf = new byte[999999];
+					byte[] buf = new byte[256];
 					DatagramPacket packet = new DatagramPacket(buf, buf.length);
 					try{
 		     			socket.receive(packet);

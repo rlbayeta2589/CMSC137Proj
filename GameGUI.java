@@ -27,7 +27,7 @@ public class GameGUI extends JFrame{
 		cards.add(new MainMenu(), "Menu");
 		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
 		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
-		cards.add(instantiateGame("","",0,0), "Start");
+		cards.add(instantiateGame("","",0,"",0), "Start");
 		/*
 			Insert more display here
 			(e.g.) the panel that will be displayed when create
@@ -46,14 +46,14 @@ public class GameGUI extends JFrame{
 		setVisible(true);
 	}
 
-	private static JPanel instantiateGame(String username, String type, int max, int port){
+	private static JPanel instantiateGame(String username, String type, int max, String servername, int port){
 		JPanel gamePanel = new JPanel();
 		JPanel westPanel = new JPanel();
 
 		gamePanel.setLayout(new BorderLayout());
 		westPanel.setLayout(new BorderLayout());
 
-		game = new Game(username,type,max,port);
+		game = new Game(username,type,max,servername,port);
 		chatfield = new ChatField();
 		statField = new StatField(username);
 
@@ -101,13 +101,13 @@ public class GameGUI extends JFrame{
 		frame.setTitle(title);
 	}
 
-	public static void updateCards(String username, String type, int max, int port) throws Exception{  // this will be used when
+	public static void updateCards(String username, String type, int max, String servername,int port) throws Exception{  // this will be used when
 		cards.removeAll();								// the main game card is already done
 		cards.setLayout(new CardLayout());
 		cards.add(new MainMenu(), "Menu");
 		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
 		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
-		cards.add(instantiateGame(username,type,max,port), "Start");
+		cards.add(instantiateGame(username,type,max,servername,port), "Start");
 		cards.setOpaque(false);
 	}
 }

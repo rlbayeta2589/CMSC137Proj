@@ -30,6 +30,7 @@ public class Server implements Runnable{
             serverSocket = new DatagramSocket(port);
 			serverSocket.setSoTimeout(100);
 		} catch (IOException e) {
+			e.printStackTrace();
             System.err.println("Could not listen on port: "+port);
             System.exit(-1);
 		}catch(Exception e){}
