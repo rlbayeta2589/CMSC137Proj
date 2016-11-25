@@ -54,9 +54,9 @@ public class MainMenu extends JPanel implements MouseListener{
 		joinGame.addMouseListener(this);
 		quitGame.addMouseListener(this);
 
-		createGame.setBounds(250,50,300,90);
-		joinGame.setBounds(250,150,300,90);
-		quitGame.setBounds(680,300,100,50);
+		createGame.setBounds(250,70,300,90);
+		joinGame.setBounds(250,170,300,90);
+		quitGame.setBounds(680,300,100,100);
 		/*createGame.setBounds(450,50,300,90);
 		joinGame.setBounds(450,150,300,90);
 		quitGame.setBounds(550,300,100,50);*/
@@ -68,8 +68,10 @@ public class MainMenu extends JPanel implements MouseListener{
 		menu.setOpaque(false);
 		menu.setBounds(200, 200, 800, 400);
 
-		JLabel logo = new JLabel(new ImageIcon("./src/img/gameLogo.png"));
-		logo.setBounds(300, 80, 600, 180);
+		image = new ImageIcon("./src/img/sample.png");
+		img = resizeImage(image, 600, 220);
+		JLabel logo = new JLabel(new ImageIcon(img));
+		logo.setBounds(300, 35, 600, 220);
 	
 		add(logo);
 		add(menu);

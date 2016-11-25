@@ -103,7 +103,7 @@ public class Boss extends GameObject{
             		}else{
             			Handler hand = game.getHandler();
             			float bulletStart = y+(height/2);
-						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet, -2));
+						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet, -3));
 						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" 0");
             		}
             	}

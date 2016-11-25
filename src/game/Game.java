@@ -48,10 +48,10 @@ public class Game extends Canvas implements Runnable {
 
 		try{
 			socket = new DatagramSocket();
+				socket.setSoTimeout(100);
 		}catch(Exception e){
 			System.out.println("ERROR");
 		}
-
 
 		setPreferredSize(new Dimension(1200, 600));
 	}
@@ -65,7 +65,6 @@ public class Game extends Canvas implements Runnable {
 		if(type=="SERVER"){
 			new Server(maxPlayers,PORT);
 		}
-
 
 		client = createClientReceiver();
 		client.start();
@@ -148,10 +147,12 @@ public class Game extends Canvas implements Runnable {
 	}
 
     private Thread createClientReceiver(){
+
         Thread receiver = new Thread() {
 
             public synchronized void run(){
 				while(true){
+					
 					byte[] buf = new byte[256];
 					DatagramPacket packet = new DatagramPacket(buf, buf.length);
 					try{
@@ -160,7 +161,7 @@ public class Game extends Canvas implements Runnable {
 					
 					serverData=new String(buf);
 					serverData=serverData.trim();
-					 
+
 					if (!connected && serverData.startsWith("CONNECTED "+name)){
 						String[] connectData = serverData.split(" ");
 						connected=true;
@@ -172,7 +173,7 @@ public class Game extends Canvas implements Runnable {
 						if (serverData.startsWith("CONNECTED")){
 							String[] connectData = serverData.split(" ");
 							if(!connectData[1].equals(name)){
-								System.out.println(serverData);
+								System.out.println("connected " + serverData);
 							}
 						}
 						if(serverData.startsWith("START")){
@@ -202,7 +203,6 @@ public class Game extends Canvas implements Runnable {
 
 						}
 						if (serverData.startsWith("INGAME")){
-							// System.out.println(serverData);
 							String[] inGameData = serverData.split("#");
 
 							String dataType = inGameData[1];

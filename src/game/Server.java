@@ -30,11 +30,11 @@ public class Server implements Runnable{
             serverSocket = new DatagramSocket(port);
 			serverSocket.setSoTimeout(100);
 		} catch (IOException e) {
-			e.printStackTrace();
             System.err.println("Could not listen on port: "+port);
             System.exit(-1);
-		}catch(Exception e){}
-
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		t.start();
 	}
 
@@ -60,7 +60,6 @@ public class Server implements Runnable{
 	public void run(){
 		connected = true;
 		while(connected){
-						
 			byte[] buf = new byte[256];
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			try{
@@ -70,7 +69,6 @@ public class Server implements Runnable{
 			playerData=new String(buf);
 			
 			playerData = playerData.trim();
-
 
 			switch(gameStage){
 				  case WAITING_FOR_PLAYERS:
@@ -110,7 +108,7 @@ public class Server implements Runnable{
 						startData += "#" + name + " " + player.getX() + " " + player.getY();
 					}
 
-					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*500);
+					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*2500);
 
 					broadcast(startData);
 					gameStage=IN_PROGRESS;

@@ -10,6 +10,7 @@ public class KeyInput extends KeyAdapter{
 	Handler handler;
 	Game game;
 	String name;
+	int cooldown = 3;
 
 	public KeyInput(Handler handler, Game game, String name){
 		this.handler = handler;
