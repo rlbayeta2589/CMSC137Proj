@@ -14,16 +14,17 @@ public class Boss extends GameObject{
 	private Game game;
 	public int width = 150, height = 200, damage = 10;
 	public int health, orig_health;
-	public boolean moving = false, dead = false;
+	public boolean moving = false, dead = false, pspawnCD = false;
 	public float prevX, prevY;
 	public float destination;
-	public int direction, animate_count=0, frame_no=1;
+	public int direction, animate_count=0, frame_no=1, regen=0;
 
 	public Boss(float x, float y, ObjectId id, int health,Game game, String utype){
 		super(x,y,id);
 		this.health = health;
 		this.orig_health = health;
 		this.game = game;
+		this.regen = (int)(orig_health*0.002);
 
 		if(utype=="SERVER"){
 			Thread movement = createMovements();
@@ -79,17 +80,43 @@ public class Boss extends GameObject{
 
 	public Thread createMovements(){
         Thread movement = new Thread() {
-
             public void run(){
+				Handler hand = game.getHandler();
             	while(health > 0){
+            		health+=regen;
+
+            		if(health>=orig_health) health = orig_health;
+					
+					if(health<(orig_health*0.15)) regen = (int)(orig_health*0.035);
+					else if(health<(orig_health*0.60)) regen = (int)(orig_health*0.01);
+					else if(health<orig_health) regen = (int)(orig_health*0.002);
 
             		try{
             			Thread.sleep(800);
+            			orig_health++;
             		}catch(Exception e){}
 
-            		int move = random.nextInt(100) + 1;
+            		int spawn = random.nextInt(1000) + 1;
+            		int puptype = random.nextInt(100) + 1;
 
-            		if(!moving && move>70){
+            		if(!pspawnCD && spawn>=500 && spawn<=600){
+            			if(puptype<=45){
+							hand.addObject(new PowerUp(hand,game,ObjectId.PowerUp,"HEALTH"));
+            			}else if(puptype<=85){
+							hand.addObject(new PowerUp(hand,game,ObjectId.PowerUp,"DMG"));
+            			}else if(puptype<=100){
+							hand.addObject(new PowerUp(hand,game,ObjectId.PowerUp,"ARMOR"));
+            			}
+            			pspawnCD = true;
+
+            			new java.util.Timer().schedule(new TimerTask(){
+							public void run(){
+								pspawnCD = false;
+							}
+						},5000);
+            		}
+
+            		if(!moving && puptype>70){
             			moving = true;
 						destination = (float)random.nextInt(Game.HEIGHT-height-5) + 5;
 
@@ -101,7 +128,6 @@ public class Boss extends GameObject{
 							direction = UP;
 						}
             		}else{
-            			Handler hand = game.getHandler();
             			float bulletStart = y+(height/2);
 						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet));
 						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" 0");

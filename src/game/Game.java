@@ -196,6 +196,7 @@ public class Game extends Canvas implements Runnable {
 									StatField.setDamage(10);
 									StatField.setScore(0);
 									StatField.setBullet(30);
+									StatField.setArmor(0);
 								}else{
 									temp = new SpaceShip(Float.parseFloat(playerData[1]),Float.parseFloat(playerData[2]),null,game,uuname);
 									handler.addObject(temp);
@@ -245,6 +246,18 @@ public class Game extends Canvas implements Runnable {
 										}
 									},3000);
 								}
+							}else if(dataType.equals("BARRIER")){
+								String uname = inGameData[2];
+								if(!uname.equals(name)){
+									SpaceShip temp = spaceships.get(inGameData[2]);
+									temp.setShielded(inGameData[3].equals("ON")?true:false);
+								}
+							}else if(dataType.equals("POWERUP") && !type.equals("SERVER")){
+								String puptype = inGameData[2];
+								float xxx = Float.parseFloat(inGameData[3]);
+								float yyy = Float.parseFloat(inGameData[4]);
+								float velX = Float.parseFloat(inGameData[5]);
+								handler.addObject(new PowerUp(xxx,yyy,velX,handler,ObjectId.PowerUp,puptype));
 							}
 
 						}

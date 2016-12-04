@@ -19,7 +19,7 @@ public class BossBullet extends GameObject{
 	}
 
 	public void tick(LinkedList<GameObject> object){
-		if(x+velX<=-1*width) object.remove(this);
+		if(x+velX<=-1*width) handler.removeObject(this);
 		x += velX;
 		
 		collision(object);
@@ -40,12 +40,17 @@ public class BossBullet extends GameObject{
 
 			if(tempObject.getId() == ObjectId.SpaceShip){
 				if(getBounds().intersects(tempObject.getBounds())){
-					object.remove(this);
+					handler.removeObject(this);
 					((SpaceShip)tempObject).damageSpaceShip(damage);
 				}
 			}else if(tempObject.getId() == null){
 				if(getBounds().intersects(tempObject.getBounds())){
-					object.remove(this);
+					handler.removeObject(this);
+				}
+			}else if(tempObject.getId() == ObjectId.Bullet){
+				if(getBounds().intersects(tempObject.getBounds())){
+					handler.removeObject(this);
+					handler.removeObject(tempObject);
 				}
 			}
 		}

@@ -12,6 +12,7 @@ public class StatField extends JPanel{
     private static JLabel username;
     private static JLabel healthField;
     private static JLabel damageField;
+    private static JLabel armorField;
     private static JLabel scoreField;
     private static JLabel bulletField;
 
@@ -23,6 +24,7 @@ public class StatField extends JPanel{
         username = new JLabel(uname, SwingConstants.CENTER);
         healthField = new JLabel("", SwingConstants.CENTER);
         damageField = new JLabel("", SwingConstants.CENTER);
+        armorField = new JLabel("", SwingConstants.CENTER);
         scoreField = new JLabel("", SwingConstants.CENTER);
         bulletField = new JLabel("", SwingConstants.LEFT);
 
@@ -37,13 +39,15 @@ public class StatField extends JPanel{
 
         username.setBounds(63,43,120,30);
         healthField.setBounds(66,100,100,30);
-        damageField.setBounds(66,163,100,30);
+        damageField.setBounds(60,163,40,30);
+        armorField.setBounds(135,163,40,30);
         scoreField.setBounds(66,225,100,30);
         bulletField.setBounds(90,10,100,30);
 
         username.setFont(new Font("Serif", Font.BOLD, 20));
         healthField.setFont(new Font("Serif", Font.BOLD, 20));
         damageField.setFont(new Font("Serif", Font.BOLD, 20));
+        armorField.setFont(new Font("Serif", Font.BOLD, 20));
         scoreField.setFont(new Font("Serif", Font.BOLD, 20));
         bulletField.setFont(new Font("Serif", Font.BOLD, 15));
         
@@ -54,6 +58,7 @@ public class StatField extends JPanel{
         add(username);
         add(healthField);
         add(damageField);
+        add(armorField);
         add(scoreField);
         add(background);
     }
@@ -69,7 +74,7 @@ public class StatField extends JPanel{
     }
 
     public static void setHealth(int health){
-        healthField.setText(health + "/250");
+        healthField.setText(health+"");
     }
 
     public static void setDamage(int damage){
@@ -78,6 +83,10 @@ public class StatField extends JPanel{
 
     public static void setScore(int score){
         scoreField.setText(score+"");
+    }
+
+    public static void setArmor(int armor){
+        armorField.setText(armor+"");
     }
 
 }

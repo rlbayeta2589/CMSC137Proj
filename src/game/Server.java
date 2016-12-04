@@ -108,7 +108,7 @@ public class Server implements Runnable{
 						startData += "#" + name + " " + player.getX() + " " + player.getY();
 					}
 
-					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*2500);
+					startData += "#==BOSS==" + " " + boss.getX() + " " + boss.getY() + " " + (numPlayers*3000);
 
 					broadcast(startData);
 					gameStage=IN_PROGRESS;
@@ -138,6 +138,10 @@ public class Server implements Runnable{
 							inGameData += "#BULLET#" + pname + "#" + x + "#" + y + "#" + damage;
 						}else if(playerData.startsWith("DEAD")){
 							inGameData += "#DEAD#" + pname;
+						}else if(playerData.startsWith("BARRIER")){
+							inGameData += "#BARRIER#" + pname + "#" + (damage==1?"ON":"OFF");
+						}else if(playerData.startsWith("POWERUP")){
+							inGameData += "#POWERUP#" + pname + "#" + x + "#" + y + "#" + Float.parseFloat(playerInfo[4]);
 						}
 
 						broadcast(inGameData);

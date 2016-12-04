@@ -10,9 +10,9 @@ public class SpaceShip extends GameObject{
 
 	private Game game;
 	private String name;
-	public int width = 70, height =40, damage=10, health=250;
+	public int width = 70, height =40, damage=10, health=250, shield=0;
 	public float prevX, prevY;
-	public boolean dead = false, cooldown = false;
+	public boolean dead = false, cooldown = false, shielded = false;
 	private int bullet = 30;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){
@@ -27,7 +27,7 @@ public class SpaceShip extends GameObject{
 	public void tick(LinkedList<GameObject> object){
 		if(x+velX<=5) x = 5;
 		if(y+velY<=5) y = 5;
-		if(x+width+velX>= Game.WIDTH 	) x = Game.WIDTH - width - 5;
+		if(x+width+velX>= Game.WIDTH ) x = Game.WIDTH - width - 5;
 		if(y+height+velY>=Game.HEIGHT) y = Game.HEIGHT - height - velY;
 
 		prevX = x;
@@ -45,6 +45,13 @@ public class SpaceShip extends GameObject{
 
 	public void render(Graphics g){
 		ImageIcon ship = new ImageIcon("./src/img/spaceship.png");
+
+		if(shielded){
+			ImageIcon shield = new ImageIcon("./src/img/spaceship_barrier.png");
+			Image newIMG = Util.resizeImage(shield,width+5,height+5);
+			shield = new ImageIcon(newIMG);
+			g.drawImage(shield.getImage(),(int)x-2,(int)y-2,null);
+		}
 
 		if(dead){
 			ship = new ImageIcon("./src/img/explosion.png");
@@ -75,7 +82,7 @@ public class SpaceShip extends GameObject{
 
 			if(tempObject.getId() == ObjectId.Boss){
 				if(getBounds().intersects(tempObject.getBounds())){
-					damageSpaceShip(250);
+					damageSpaceShip(1000);
 				}
 			}
 		}
@@ -83,6 +90,10 @@ public class SpaceShip extends GameObject{
 
 	public int getDamage(){
 		return this.damage;
+	}
+
+	public void setShielded(boolean shielded){
+		this.shielded = shielded;
 	}
 
 	public void explode(){
@@ -94,7 +105,21 @@ public class SpaceShip extends GameObject{
 	}
 
 	public void damageSpaceShip(int indmg){
+		if(dead) return;
+
 		SpaceShip temp = this;
+
+		if(shielded){
+			shield--;
+			if(shield<=0){
+				shield = 0;
+				shielded = false;
+				game.send("BARRIER "+name+" 0 0 0");
+			}
+			StatField.setArmor(shield);
+			return;
+		}
+
 		health = health - indmg;
 		if(health<=0){
 			health = 0;
@@ -116,6 +141,7 @@ public class SpaceShip extends GameObject{
 	}
 
 	public void decrementBullet(){
+		if(dead) return;
 		bullet-=1;
 
 		if(bullet <= 0){
@@ -135,5 +161,26 @@ public class SpaceShip extends GameObject{
 	public void replenishBullet(){
 		this.bullet = 30;
 		StatField.setBullet(bullet);
+	}
+
+	public void damageUP(int dmg){
+		if(dead) return;
+		this.damage+=dmg;
+		StatField.setDamage(damage);
+	}
+
+	public void heal(int hp){
+		if(dead) return;
+		this.health+=hp;
+		StatField.setHealth(health);
+	}
+
+	public void shield(int amount){
+		if(dead) return;
+		this.shield+=amount;
+		shielded = true;
+		StatField.setArmor(shield);
+
+		game.send("BARRIER "+name+" 0 0 1");
 	}
 }
