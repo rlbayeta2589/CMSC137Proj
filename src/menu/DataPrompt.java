@@ -35,7 +35,7 @@ public class DataPrompt extends JPanel implements MouseListener{
 		ipField = new JTextField(30);
 
 		usernameField.setText("username");
-		ipField.setText("192.168.43.96");
+		ipField.setText("localhost");
 
 		usernameField.setFont(new Font("Serif", Font.BOLD, 20));
 		ipField.setFont(new Font("Serif", Font.BOLD, 20));

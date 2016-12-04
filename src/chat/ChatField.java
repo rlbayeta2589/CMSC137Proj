@@ -64,6 +64,10 @@ public class ChatField extends JPanel{
 
         });
 
+        displayMessage("   WELCOME TO THE BOSS FIGHT\n");
+        displayMessage("              Please wait for other \n");
+        displayMessage("          players to start the game. \n\n");
+
         setPreferredSize(new Dimension(200,400));
         add(scrollArea,BorderLayout.CENTER);
         add(sendingArea, BorderLayout.SOUTH);

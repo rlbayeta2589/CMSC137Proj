@@ -11,9 +11,9 @@ public class BossBullet extends GameObject{
 	public int width = 10, height = 5, damage;
 	private Handler handler;
 
-	public BossBullet(float x, float y, Handler handler, ObjectId id, int velX){
+	public BossBullet(float x, float y, Handler handler, ObjectId id){
 		super(x,y,id);
-		this.velX = velX;
+		this.velX = -3;
 		this.damage = 50;
 		this.handler = handler;
 	}

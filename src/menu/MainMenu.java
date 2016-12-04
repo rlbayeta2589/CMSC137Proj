@@ -57,9 +57,6 @@ public class MainMenu extends JPanel implements MouseListener{
 		createGame.setBounds(250,70,300,90);
 		joinGame.setBounds(250,170,300,90);
 		quitGame.setBounds(680,300,100,100);
-		/*createGame.setBounds(450,50,300,90);
-		joinGame.setBounds(450,150,300,90);
-		quitGame.setBounds(550,300,100,50);*/
 
 		menu.setLayout(null);
 		menu.add(createGame);
@@ -113,6 +110,7 @@ public class MainMenu extends JPanel implements MouseListener{
 
 		cardLayout = (CardLayout)GameGUI.getCards().getLayout();
 		cardLayout.show(GameGUI.getCards(), "Start");
+		GameGUI.focusOnGame();
 		GameGUI.getGame().start();
 	}
 

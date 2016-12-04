@@ -13,6 +13,7 @@ public class StatField extends JPanel{
     private static JLabel healthField;
     private static JLabel damageField;
     private static JLabel scoreField;
+    private static JLabel bulletField;
 
     public StatField(String uname){
         super();
@@ -23,6 +24,7 @@ public class StatField extends JPanel{
         healthField = new JLabel("", SwingConstants.CENTER);
         damageField = new JLabel("", SwingConstants.CENTER);
         scoreField = new JLabel("", SwingConstants.CENTER);
+        bulletField = new JLabel("", SwingConstants.LEFT);
 
         ImageIcon image = new ImageIcon("./src/img/statBackground.jpg");
         Image img = Util.resizeImage(image, 200, 300);
@@ -37,18 +39,33 @@ public class StatField extends JPanel{
         healthField.setBounds(66,100,100,30);
         damageField.setBounds(66,163,100,30);
         scoreField.setBounds(66,225,100,30);
+        bulletField.setBounds(90,10,100,30);
 
         username.setFont(new Font("Serif", Font.BOLD, 20));
         healthField.setFont(new Font("Serif", Font.BOLD, 20));
         damageField.setFont(new Font("Serif", Font.BOLD, 20));
         scoreField.setFont(new Font("Serif", Font.BOLD, 20));
+        bulletField.setFont(new Font("Serif", Font.BOLD, 15));
+        
+        bulletField.setForeground(Color.YELLOW);
 
         setPreferredSize(new Dimension(200,300));
+        add(bulletField);
         add(username);
         add(healthField);
         add(damageField);
         add(scoreField);
         add(background);
+    }
+
+    public static void setBullet(int count){
+        String temp = "";
+        int i;
+        for(i=0;i<count;i++){
+            temp += "|";
+        }
+
+        bulletField.setText(temp);
     }
 
     public static void setHealth(int health){

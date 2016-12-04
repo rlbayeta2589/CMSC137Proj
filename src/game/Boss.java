@@ -88,7 +88,7 @@ public class Boss extends GameObject{
             		}catch(Exception e){}
 
             		int move = random.nextInt(100) + 1;
-            	
+
             		if(!moving && move>70){
             			moving = true;
 						destination = (float)random.nextInt(Game.HEIGHT-height-5) + 5;
@@ -103,8 +103,25 @@ public class Boss extends GameObject{
             		}else{
             			Handler hand = game.getHandler();
             			float bulletStart = y+(height/2);
-						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet, -3));
+						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet));
 						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" 0");
+
+						if(health<(orig_health*0.80)){
+							hand.addObject(new BossBullet(x+40,y,hand,ObjectId.BossBullet));
+							hand.addObject(new BossBullet(x+40,y+height,hand,ObjectId.BossBullet));
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+y+" 0");
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+(y+height)+" 0");
+						}
+
+
+						if(health<(orig_health*0.40)){
+							hand.addObject(new BossBullet(x+20,bulletStart+(height/4),hand,ObjectId.BossBullet));
+							hand.addObject(new BossBullet(x+20,bulletStart-(height/4),hand,ObjectId.BossBullet));
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart+(height/4))+" 0");
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart-(height/4))+" 0");
+						}
+
+
             		}
             	}
             }
@@ -114,7 +131,7 @@ public class Boss extends GameObject{
 	}
 
 	public Rectangle getBounds(){
-		return new Rectangle((int)x,(int)y,1,height);
+		return new Rectangle((int)x,(int)y,width,height);
 	}
 	
 	public int getHealth(){

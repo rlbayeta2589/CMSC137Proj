@@ -12,7 +12,8 @@ public class SpaceShip extends GameObject{
 	private String name;
 	public int width = 70, height =40, damage=10, health=250;
 	public float prevX, prevY;
-	public boolean dead = false;
+	public boolean dead = false, cooldown = false;
+	private int bullet = 30;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){
 		super(x,y,id);
@@ -27,7 +28,7 @@ public class SpaceShip extends GameObject{
 		if(x+velX<=5) x = 5;
 		if(y+velY<=5) y = 5;
 		if(x+width+velX>= Game.WIDTH 	) x = Game.WIDTH - width - 5;
-		if(y+height+velY>=Game.HEIGHT-35) y = Game.HEIGHT - height - velY - 35;
+		if(y+height+velY>=Game.HEIGHT) y = Game.HEIGHT - height - velY;
 
 		prevX = x;
 		prevY = y;
@@ -38,6 +39,8 @@ public class SpaceShip extends GameObject{
 		if(game!=null && (prevX!=x || prevY!=y)){
 			game.send("PLAYER "+name+" "+x+" "+y+" "+damage);
 		}
+
+		collision(object);
 	}
 
 	public void render(Graphics g){
@@ -63,6 +66,19 @@ public class SpaceShip extends GameObject{
 
 	public Rectangle getBounds(){
 		return new Rectangle((int)x,(int)y,width,height);
+	}
+
+	public void collision(LinkedList<GameObject> object){
+		Handler handler = game.getHandler();
+		for(int i = 0; i < handler.object.size(); i++){
+			GameObject tempObject = handler.object.get(i);
+
+			if(tempObject.getId() == ObjectId.Boss){
+				if(getBounds().intersects(tempObject.getBounds())){
+					damageSpaceShip(250);
+				}
+			}
+		}
 	}
 
 	public int getDamage(){
@@ -93,5 +109,31 @@ public class SpaceShip extends GameObject{
 			},3000);
 		}
 		StatField.setHealth(health);
+	}
+
+	public boolean isBulletCoolDown(){
+		return cooldown;
+	}
+
+	public void decrementBullet(){
+		bullet-=1;
+
+		if(bullet <= 0){
+			cooldown = true;
+
+			new java.util.Timer().schedule(new TimerTask(){
+				public void run(){
+					cooldown = false;
+					replenishBullet();
+				}
+			},2500);
+		}
+
+		StatField.setBullet(bullet);
+	}
+
+	public void replenishBullet(){
+		this.bullet = 30;
+		StatField.setBullet(bullet);
 	}
 }

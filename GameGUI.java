@@ -28,13 +28,6 @@ public class GameGUI extends JFrame{
 		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
 		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
 		cards.add(instantiateGame("","",0,"",0), "Start");
-		/*
-			Insert more display here
-			(e.g.) the panel that will be displayed when create
-						game is clicked
-				   the panel that will be displayed when join
-				   		game is clicked
-		*/
 		cards.setOpaque(false);
 		
 		getContentPane().add(cards);

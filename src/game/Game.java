@@ -1,6 +1,7 @@
 package src.game;
 
 import src.GameGUI;
+import src.chat.*;
 
 import java.awt.*;
 import javax.swing.*;
@@ -177,6 +178,7 @@ public class Game extends Canvas implements Runnable {
 							}
 						}
 						if(serverData.startsWith("START")){
+                			ChatField.displayMessage("           = = = GAME START = = =   \n\n");
 							String[] startData = serverData.split("#");
 							SpaceShip temp;
 
@@ -193,6 +195,7 @@ public class Game extends Canvas implements Runnable {
 									StatField.setHealth(250);
 									StatField.setDamage(10);
 									StatField.setScore(0);
+									StatField.setBullet(30);
 								}else{
 									temp = new SpaceShip(Float.parseFloat(playerData[1]),Float.parseFloat(playerData[2]),null,game,uuname);
 									handler.addObject(temp);
@@ -228,7 +231,7 @@ public class Game extends Canvas implements Runnable {
 							}else if(dataType.equals("BOSSBULLET") && !type.equals("SERVER")){
 								float xxx = Float.parseFloat(inGameData[2]);
 								float yyy = Float.parseFloat(inGameData[3]);
-								handler.addObject(new BossBullet(xxx,yyy,handler,ObjectId.BossBullet, -2));
+								handler.addObject(new BossBullet(xxx,yyy,handler,ObjectId.BossBullet));
 							}else if(dataType.equals("DEAD")){
 								String uname = inGameData[2];
 								if(!uname.equals(name)){
