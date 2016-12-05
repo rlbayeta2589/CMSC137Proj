@@ -16,6 +16,7 @@ public class Game extends Canvas implements Runnable {
 	public static int WIDTH, HEIGHT;
 
 	private static HashMap<String,SpaceShip> spaceships = new HashMap<String,SpaceShip>();
+	private static HashMap<String,Integer> scores = new HashMap<String,Integer>();
 	private static Boss boss;
 
 	private ImageIcon background;
@@ -147,6 +148,10 @@ public class Game extends Canvas implements Runnable {
         }catch(Exception e){}
 	}
 
+	public static void printScores(){
+		
+	}
+
     private Thread createClientReceiver(){
 
         Thread receiver = new Thread() {
@@ -224,7 +229,7 @@ public class Game extends Canvas implements Runnable {
 									float xxx = Float.parseFloat(inGameData[3]);
 									float yyy = Float.parseFloat(inGameData[4]);
 									int dmg = Integer.parseInt(inGameData[5]);
-									handler.addObject(new Bullet(xxx,yyy,handler,ObjectId.Bullet,5,dmg));
+									handler.addObject(new Bullet(uname,xxx,yyy,handler,game,ObjectId.Bullet,5,dmg));
 								}
 							}else if(dataType.equals("BOSS") && !type.equals("SERVER")){
 								boss.setX(Float.parseFloat(inGameData[2]));
@@ -232,7 +237,8 @@ public class Game extends Canvas implements Runnable {
 							}else if(dataType.equals("BOSSBULLET") && !type.equals("SERVER")){
 								float xxx = Float.parseFloat(inGameData[2]);
 								float yyy = Float.parseFloat(inGameData[3]);
-								handler.addObject(new BossBullet(xxx,yyy,handler,ObjectId.BossBullet));
+								int dmg = Integer.parseInt(inGameData[4]);
+								handler.addObject(new BossBullet(xxx,yyy,handler,ObjectId.BossBullet,dmg));
 							}else if(dataType.equals("DEAD")){
 								String uname = inGameData[2];
 								if(!uname.equals(name)){
@@ -257,7 +263,32 @@ public class Game extends Canvas implements Runnable {
 								float xxx = Float.parseFloat(inGameData[3]);
 								float yyy = Float.parseFloat(inGameData[4]);
 								float velX = Float.parseFloat(inGameData[5]);
-								handler.addObject(new PowerUp(xxx,yyy,velX,handler,ObjectId.PowerUp,puptype));
+								int value = Integer.parseInt(inGameData[6]);
+								handler.addObject(new PowerUp(xxx,yyy,velX,handler,ObjectId.PowerUp,puptype,value));
+							}else if(dataType.equals("REGEN") && !type.equals("SERVER")){
+								boss.setHealth(Integer.parseInt(inGameData[2]));
+							}else if(dataType.equals("BUFF") && !type.equals("SERVER")){
+								boss.setDamage(Integer.parseInt(inGameData[2]));
+							}else if(dataType.equals("MAXHEALTH") && !type.equals("SERVER")){
+								boss.setOrigHealth(Integer.parseInt(inGameData[2]));
+							}else if(dataType.equals("SCORE")){
+								String uname = inGameData[2];
+								Integer point = Integer.parseInt(inGameData[3]);
+								SpaceShip temp = spaceships.get(uname);
+								
+								if(uname.equals(name)){
+									temp.addScore(point);
+								}
+
+								if(scores.containsKey(uname)){
+									scores.put(uname,scores.get(uname)+point);
+								}else{
+									scores.put(uname,point);
+								}
+
+								String x = Util.entriesSortedByValues(scores).toString();
+								x = x.substring(1, x.length() - 1);
+								System.out.println(x);
 							}
 
 						}

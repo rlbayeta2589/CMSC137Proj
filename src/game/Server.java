@@ -141,7 +141,16 @@ public class Server implements Runnable{
 						}else if(playerData.startsWith("BARRIER")){
 							inGameData += "#BARRIER#" + pname + "#" + (damage==1?"ON":"OFF");
 						}else if(playerData.startsWith("POWERUP")){
-							inGameData += "#POWERUP#" + pname + "#" + x + "#" + y + "#" + Float.parseFloat(playerInfo[4]);
+							inGameData += "#POWERUP#" + pname + "#" + x + "#" + y + "#";
+							inGameData += Float.parseFloat(playerInfo[4]) + "#" + Integer.parseInt(playerInfo[5]);
+						}else if(playerData.startsWith("REGEN")){
+							inGameData += "#REGEN#" + damage;
+						}else if(playerData.startsWith("BUFF")){
+							inGameData += "#BUFF#" + damage;
+						}else if(playerData.startsWith("MAXHEALTH")){
+							inGameData += "#MAXHEALTH#" + damage;
+						}else if(playerData.startsWith("SCORE")){
+							inGameData += "#SCORE#" + pname + "#" + damage;
 						}
 
 						broadcast(inGameData);

@@ -10,11 +10,15 @@ public class Bullet extends GameObject{
 
 	public int width = 8, height = 10, damage;
 	private Handler handler;
+	private Game game;
+	private String name;
 
-	public Bullet(float x, float y, Handler handler, ObjectId id, int velX, int damage){
+	public Bullet(String name, float x, float y, Handler handler, Game game, ObjectId id, int velX, int dmg){
 		super(x,y,id);
+		this.name = name;
 		this.velX = velX;
-		this.damage = damage;
+		this.damage = dmg;
+		this.game = game;
 		this.handler = handler;
 
 		if(damage>=25){
@@ -25,6 +29,11 @@ public class Bullet extends GameObject{
 		if(damage>=50){
 			height += 10;
 			width += 10;
+		}
+
+		if(damage>=100){
+			height += 15;
+			width += 15;
 		}
 	}
 
@@ -42,8 +51,6 @@ public class Bullet extends GameObject{
 		bullet = new ImageIcon(newIMG);
 		g.drawImage(bullet.getImage(),(int)x,(int)(y-(height/2)),null);
 
-		// g.setColor(Color.RED);
-		// g.fillRect((int)x,(int)y,width,height);
 	}
 
 	public Rectangle getBounds(){
@@ -58,15 +65,16 @@ public class Bullet extends GameObject{
 				if(getBounds().intersects(tempObject.getBounds())){
 					handler.removeObject(this);
 					Boss boss = (Boss)tempObject;
+					int point = damage*2;
 					boss.damageBoss(damage);
-
-					// System.out.println("Boss Health "+boss.getHealth());
+					
+					if(!boss.isDead()) game.send("SCORE "+name+" 0 0 "+point);
 				}
 			}else if(tempObject.getId() == ObjectId.BossBullet){
 				if(getBounds().intersects(tempObject.getBounds())){
 					handler.removeObject(this);
 					handler.removeObject(tempObject);
-					// System.out.println("Boss Health "+boss.getHealth());
+					game.send("SCORE "+name+" 0 0 10");
 				}
 			}
 		}

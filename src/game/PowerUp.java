@@ -11,10 +11,10 @@ public class PowerUp extends GameObject{
 	public int width = 30, height = 30;
 	private Handler handler;
 	private String type;
-	private int dmg = 0, health = 0, shield = 0, speed = 0;
+	private int dmg = 0, health = 0, shield = 0, speed = 0, value = 0;
 	private Random random = new Random();
 
-	public PowerUp(float xpos, float ypos, float velX, Handler handler, ObjectId id, String type){
+	public PowerUp(float xpos, float ypos, float velX, Handler handler, ObjectId id, String type, int val){
 		super(xpos,ypos,id);
 
 		this.y = ypos;
@@ -25,16 +25,27 @@ public class PowerUp extends GameObject{
 		this.type = type;
 
 
-		if(type.equals("HEALTH")) health = 100;
-		else if(type.equals("DMG")) dmg = 10;
-		else if(type.equals("ARMOR")) shield = 1;
+		if(type.equals("HEALTH")) health = val;	//max 300
+		else if(type.equals("DMG")) dmg = val; //max 15
+		else if(type.equals("ARMOR")) shield = val; //max 3
+
+		if(health<=100 || dmg<=8 || shield==1){
+			width = 30;
+			height = 30;
+		}else if(health<=200 || dmg<=12 || shield==2){
+			width = 35;
+			height = 35;
+		}else{
+			width = 40;
+			height = 40;
+		}
 	}
 
 	public PowerUp(Handler handler, Game game, ObjectId id, String type){
 		super(0,0,id);
 
 		speed = random.nextInt(5) + 1;
-		this.y = random.nextInt(Game.HEIGHT-20) + 21;
+		this.y = random.nextInt(Game.HEIGHT-120) + 61;
 		this.x = Game.WIDTH - 10;
 
 		this.handler = handler;
@@ -42,11 +53,30 @@ public class PowerUp extends GameObject{
 
 		this.velX = -1 * speed;
 
-		if(type.equals("HEALTH")) health = 100;
-		else if(type.equals("DMG")) dmg = 10;
-		else if(type.equals("ARMOR")) shield = 1;
+		if(type.equals("HEALTH")){
+			health = ((random.nextInt(4)+1)*50) + 50;	//max 300
+			value = health;
+		}else if(type.equals("DMG")){
+			dmg = ((random.nextInt(5)+1)*2) + 5; //max 15
+			value = dmg;
+		}else if(type.equals("ARMOR")){
+			shield = (random.nextInt(3)+1); //max 3
+			value = shield;
+		}
 
-		game.send("POWERUP "+type+" "+x+" "+y+" "+velX);
+
+		if(health<=100 || dmg<=8 || shield==1){
+			width = 30;
+			height = 30;
+		}else if(health<=200 || dmg<=12 || shield==2){
+			width = 35;
+			height = 35;
+		}else{
+			width = 40;
+			height = 40;
+		}
+
+		game.send("POWERUP "+type+" "+x+" "+y+" "+velX+" "+value);
 	}
 
 	public void tick(LinkedList<GameObject> object){
@@ -82,6 +112,10 @@ public class PowerUp extends GameObject{
 					else if(type.equals("DMG")) ((SpaceShip)tempObject).damageUP(dmg);
 					else if(type.equals("ARMOR")) ((SpaceShip)tempObject).shield(shield);
 					
+					handler.removeObject(this);
+				}
+			}else if(tempObject.getId() == null){
+				if(getBounds().intersects(tempObject.getBounds())){
 					handler.removeObject(this);
 				}
 			}

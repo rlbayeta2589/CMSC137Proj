@@ -40,7 +40,33 @@ public class GameGUI extends JFrame{
 	}
 
 	private static JPanel instantiateGame(String username, String type, int max, String servername, int port){
+		JPanel mainPanel = new JPanel();
 		JPanel gamePanel = new JPanel();
+		JPanel westPanel = new JPanel();
+
+		mainPanel.setLayout(new BorderLayout());
+		gamePanel.setLayout(null);
+		westPanel.setLayout(new BorderLayout());
+
+		game = new Game(username,type,max,servername,port);
+		chatfield = new ChatField();
+		statField = new StatField(username);
+
+		westPanel.add(statField, BorderLayout.NORTH);
+		westPanel.add(chatfield, BorderLayout.CENTER);
+
+		game.setBounds(-5,0,1000,600);
+
+		gamePanel.setOpaque(false);
+		gamePanel.add(game);
+
+		mainPanel.add(gamePanel,BorderLayout.CENTER);
+		mainPanel.add(westPanel, BorderLayout.WEST);
+		mainPanel.setOpaque(false);
+		
+		return mainPanel;
+
+/*		JPanel gamePanel = new JPanel();
 		JPanel westPanel = new JPanel();
 
 		gamePanel.setLayout(new BorderLayout());
@@ -57,7 +83,7 @@ public class GameGUI extends JFrame{
 		gamePanel.add(westPanel, BorderLayout.WEST);
 		gamePanel.setOpaque(false);
 		
-		return gamePanel;
+		return gamePanel;*/
 
 /*		gamePanel.setLayout(null);
 		game = new Game(username,type,max,port);
@@ -71,8 +97,8 @@ public class GameGUI extends JFrame{
 		gamePanel.add(chatfield);
 		gamePanel.add(game);
 
-		return gamePanel;
-*/	}
+		return gamePanel;*/
+	}
 
 	public static void focusOnGame(){
 		game.requestFocusInWindow();

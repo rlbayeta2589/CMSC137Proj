@@ -10,12 +10,18 @@ public class BossBullet extends GameObject{
 
 	public int width = 10, height = 5, damage;
 	private Handler handler;
+	private Random random = new Random();
 
-	public BossBullet(float x, float y, Handler handler, ObjectId id){
+	public BossBullet(float x, float y, Handler handler, ObjectId id, int damage){
 		super(x,y,id);
 		this.velX = -3;
-		this.damage = 50;
 		this.handler = handler;
+
+		if((damage-50) <= 10){
+			this.damage = damage;
+		}else{
+			this.damage = (random.nextInt(damage-50)+1) + 50;
+		}
 	}
 
 	public void tick(LinkedList<GameObject> object){

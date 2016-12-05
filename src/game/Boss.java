@@ -12,12 +12,12 @@ public class Boss extends GameObject{
 	private Random random = new Random();
 	private javax.swing.Timer timer;
 	private Game game;
-	public int width = 150, height = 200, damage = 10;
-	public int health, orig_health;
+	public int width = 150, height = 200;
+	public int health, orig_health, damage;
 	public boolean moving = false, dead = false, pspawnCD = false;
 	public float prevX, prevY;
 	public float destination;
-	public int direction, animate_count=0, frame_no=1, regen=0;
+	public int direction, animate_count=0, frame_no=1, regen=0, accumulated = 0, armor = 0;
 
 	public Boss(float x, float y, ObjectId id, int health,Game game, String utype){
 		super(x,y,id);
@@ -25,6 +25,7 @@ public class Boss extends GameObject{
 		this.orig_health = health;
 		this.game = game;
 		this.regen = (int)(orig_health*0.002);
+		this.damage = 50;
 
 		if(utype=="SERVER"){
 			Thread movement = createMovements();
@@ -84,16 +85,26 @@ public class Boss extends GameObject{
 				Handler hand = game.getHandler();
             	while(health > 0){
             		health+=regen;
+        			orig_health++;
+
+					game.send("REGEN BOSS 0 0 "+health);
+					game.send("MAXHEALTH BOSS 0 0 "+orig_health);
 
             		if(health>=orig_health) health = orig_health;
-					
-					if(health<(orig_health*0.15)) regen = (int)(orig_health*0.035);
-					else if(health<(orig_health*0.60)) regen = (int)(orig_health*0.01);
-					else if(health<orig_health) regen = (int)(orig_health*0.002);
+
+					if(health<(orig_health*0.15)){
+						int chance = random.nextInt(100) + 1;
+						regen = (int)(orig_health*0.025);
+
+						if(chance>=80 && chance<=85){
+							health += (int)(orig_health*0.25);
+						}
+
+					}else if(health<(orig_health*0.60)) regen = (int)(orig_health*0.008);
+					else if(health<orig_health) regen = (int)(orig_health*0.00125);
 
             		try{
             			Thread.sleep(800);
-            			orig_health++;
             		}catch(Exception e){}
 
             		int spawn = random.nextInt(1000) + 1;
@@ -102,6 +113,8 @@ public class Boss extends GameObject{
             		if(!pspawnCD && spawn>=500 && spawn<=600){
             			if(puptype<=45){
 							hand.addObject(new PowerUp(hand,game,ObjectId.PowerUp,"HEALTH"));
+							damage += random.nextInt(30) + 11;
+							game.send("BUFF BOSS 0 0 "+damage);
             			}else if(puptype<=85){
 							hand.addObject(new PowerUp(hand,game,ObjectId.PowerUp,"DMG"));
             			}else if(puptype<=100){
@@ -129,22 +142,22 @@ public class Boss extends GameObject{
 						}
             		}else{
             			float bulletStart = y+(height/2);
-						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet));
-						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" 0");
+						hand.addObject(new BossBullet(x,bulletStart,hand,ObjectId.BossBullet,damage));
+						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" "+damage);
 
 						if(health<(orig_health*0.80)){
-							hand.addObject(new BossBullet(x+40,y,hand,ObjectId.BossBullet));
-							hand.addObject(new BossBullet(x+40,y+height,hand,ObjectId.BossBullet));
-							game.send("BOSSBULLET BULLET "+(x+40)+" "+y+" 0");
-							game.send("BOSSBULLET BULLET "+(x+40)+" "+(y+height)+" 0");
+							hand.addObject(new BossBullet(x+40,y,hand,ObjectId.BossBullet,damage));
+							hand.addObject(new BossBullet(x+40,y+height,hand,ObjectId.BossBullet,damage));
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+y+" "+damage);
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+(y+height)+" "+damage);
 						}
 
 
 						if(health<(orig_health*0.40)){
-							hand.addObject(new BossBullet(x+20,bulletStart+(height/4),hand,ObjectId.BossBullet));
-							hand.addObject(new BossBullet(x+20,bulletStart-(height/4),hand,ObjectId.BossBullet));
-							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart+(height/4))+" 0");
-							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart-(height/4))+" 0");
+							hand.addObject(new BossBullet(x+20,bulletStart+(height/4),hand,ObjectId.BossBullet,damage));
+							hand.addObject(new BossBullet(x+20,bulletStart-(height/4),hand,ObjectId.BossBullet,damage));
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart+(height/4))+" "+damage);
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart-(height/4))+" "+damage);
 						}
 
 
@@ -160,13 +173,43 @@ public class Boss extends GameObject{
 		return new Rectangle((int)x,(int)y,width,height);
 	}
 	
+	public boolean isDead(){
+		return (health<=0?true:false);
+	}
+
 	public int getHealth(){
 		return health;
+	}
+
+	public void setHealth(int hp){
+		this.health = hp;
+	}
+
+	public void setDamage(int dmg){
+		this.damage = dmg;
+	}
+
+	public void setOrigHealth(int hp){
+		this.orig_health = hp;
 	}
 
 	public void damageBoss(int damage){
 		Boss temp = this;
 		health -= damage;
+
+		accumulated += damage;
+
+		if(accumulated>=1000){
+			accumulated -= 1000;
+			damage+=50;
+			orig_health+=100;
+			health+=50;
+			
+			game.send("BUFF BOSS 0 0 "+damage);
+			game.send("REGEN BOSS 0 0 "+health);
+			game.send("MAXHEALTH BOSS 0 0 "+orig_health);
+		}
+
 		if(health <= 0){
 			dead = true;
 

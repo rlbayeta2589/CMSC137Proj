@@ -13,7 +13,8 @@ public class SpaceShip extends GameObject{
 	public int width = 70, height =40, damage=10, health=250, shield=0;
 	public float prevX, prevY;
 	public boolean dead = false, cooldown = false, shielded = false;
-	private int bullet = 30;
+	private int bullet = 30, checkpoint = 3000;
+	private int points = 0, reward = 1;
 
 	public SpaceShip(float x, float y, ObjectId id, Game game, String name){
 		super(x,y,id);
@@ -22,19 +23,21 @@ public class SpaceShip extends GameObject{
 
 		prevX = x;
 		prevY = y;
+
 	}
 
 	public void tick(LinkedList<GameObject> object){
-		if(x+velX<=5) x = 5;
-		if(y+velY<=5) y = 5;
-		if(x+width+velX>= Game.WIDTH ) x = Game.WIDTH - width - 5;
-		if(y+height+velY>=Game.HEIGHT) y = Game.HEIGHT - height - velY;
 
 		prevX = x;
 		prevY = y;
 
 		x += velX;
 		y += velY;
+
+		if(x<=5) x = 5;
+		if(y<=5) y = 5;
+		if(x+width>= Game.WIDTH ) x = Game.WIDTH - width;
+		if(y+height>=Game.HEIGHT-35) y = Game.HEIGHT - height - 35;
 
 		if(game!=null && (prevX!=x || prevY!=y)){
 			game.send("PLAYER "+name+" "+x+" "+y+" "+damage);
@@ -83,6 +86,10 @@ public class SpaceShip extends GameObject{
 			if(tempObject.getId() == ObjectId.Boss){
 				if(getBounds().intersects(tempObject.getBounds())){
 					damageSpaceShip(1000);
+				}
+			}else if(tempObject.getId() == ObjectId.PowerUp && this.id == null){
+				if(getBounds().intersects(tempObject.getBounds())){
+					handler.removeObject(tempObject);
 				}
 			}
 		}
@@ -182,5 +189,44 @@ public class SpaceShip extends GameObject{
 		StatField.setArmor(shield);
 
 		game.send("BARRIER "+name+" 0 0 1");
+	}
+
+	public void addScore(int score){
+		int dmg, hp;
+		points+=score; 
+
+		if(points>checkpoint){
+
+			if(checkpoint<10000){
+				checkpoint+=5000;
+				dmg=2;
+				hp=15*reward;
+			}else if(checkpoint<30000){
+				checkpoint+=8500;
+				dmg=5;
+				hp=30*reward;
+			}else{
+				checkpoint+=12000;
+				dmg=7;
+				hp=50*reward;
+			}
+
+			heal(hp);
+			damageUP(dmg);
+
+
+			if(reward%2==0){
+				shield(reward);
+			}
+
+			reward++;
+		}
+
+
+		StatField.setScore(points);
+	}
+
+	public int getScore(){
+		return this.points;
 	}
 }
