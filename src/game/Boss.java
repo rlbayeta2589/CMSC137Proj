@@ -232,6 +232,7 @@ public class Boss extends GameObject{
 			});
 			timer.setRepeats(true);
 			timer.start();
+			game.send("BOSSDEAD")
 		}
 	}
 
