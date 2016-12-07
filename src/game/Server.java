@@ -154,8 +154,10 @@ public class Server implements Runnable{
 							inGameData += "#SCORE#" + pname + "#" + damage;
 						}else if (playerData.startsWith("BOSSDEAD")) {
 							broadcast("ENDGAME");
+							println("BOSS DEAD");
 						}else if(numDead == playerCount){
 							broadcast("ENDGAME");
+							println("PLAYERS DEAD")
 						}
 
 						broadcast(inGameData);

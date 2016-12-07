@@ -294,6 +294,9 @@ public class Game extends Canvas implements Runnable {
 							}
 
 						}
+						if(serverData.startsWith("ENDGAME")){
+							ChatField.displayMessage("           = = = GAME END = = =   \n\n");
+						}
 					}
 	            }
 			}
