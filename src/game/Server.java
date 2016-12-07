@@ -18,6 +18,7 @@ public class Server implements Runnable{
 	private boolean connected = false;
 	private String playerData;
 	private int playerCount=0;
+	private int numDeadPlayers = 0;
 	private int numPlayers;
 	private Thread t = new Thread(this);
 
@@ -151,6 +152,12 @@ public class Server implements Runnable{
 							inGameData += "#MAXHEALTH#" + damage;
 						}else if(playerData.startsWith("SCORE")){
 							inGameData += "#SCORE#" + pname + "#" + damage;
+						}else if (playerData.startsWith("BOSSDEAD")) {
+							broadcast("ENDGAME");
+							println("BOSS DEAD");
+						}else if(numDead == playerCount){
+							broadcast("ENDGAME");
+							println("PLAYERS DEAD")
 						}
 
 						broadcast(inGameData);
