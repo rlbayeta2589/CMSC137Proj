@@ -31,6 +31,7 @@ public class GameGUI extends JFrame{
 		cards.add(new MainMenu(), "Menu");
 		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
 		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
+		cards.add(new HowToPlay(), "HowToPlay");
 		cards.add(instantiateGame("","",0,"",0), "Start");
 		cards.setOpaque(false);
 		
@@ -136,6 +137,7 @@ public class GameGUI extends JFrame{
 		cards.add(new MainMenu(), "Menu");
 		cards.add(new DataPrompt("SERVER"), "DataPromptServer");
 		cards.add(new DataPrompt("CLIENT"), "DataPromptClient");
+		cards.add(new HowToPlay(), "HowToPlay");
 		cards.add(instantiateGame(username,type,max,servername,port), "Start");
 		cards.setOpaque(false);
 	}

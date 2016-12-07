@@ -19,6 +19,7 @@ public class DataPrompt extends JPanel implements MouseListener{
 	private JPanel askUsername = new JPanel();
 	private JPanel askIPaddress = new JPanel();
 	private JPanel askMaxPlayers = new JPanel();
+	private JPanel back = new JPanel();
 
 	private JTextField usernameField;
 	private JTextField ipField;
@@ -33,9 +34,6 @@ public class DataPrompt extends JPanel implements MouseListener{
 
 		usernameField = new JTextField(30);
 		ipField = new JTextField(30);
-
-		usernameField.setText("username");
-		ipField.setText("localhost");
 
 		usernameField.setFont(new Font("Serif", Font.BOLD, 20));
 		ipField.setFont(new Font("Serif", Font.BOLD, 20));
@@ -71,15 +69,21 @@ public class DataPrompt extends JPanel implements MouseListener{
 		img = resizeImage(image, 800, 100);
 		askIPaddress.add(new JLabel(new ImageIcon(img)));
 
+		image = new ImageIcon("./src/img/buttonBack.png");
+		img = resizeImage(image, 150, 90);
+		back.add(new JLabel(new ImageIcon(img)));
+
 		play.setOpaque(false);
 		prompt.setOpaque(false);
 		askUsername.setOpaque(false);
 		askIPaddress.setOpaque(false);
+		back.setOpaque(false);
 
 		play.setBounds(1000,10,180,70);
 		prompt.setBounds(920,100,250,60);
 		askUsername.setBounds(200,150,800,100);
 		askIPaddress.setBounds(200,300,800,100);
+		back.setBounds(5,480,150,90);
 
 		if(utype=="SERVER"){
 			image = new ImageIcon("./src/img/askmaxplayers.png");
@@ -111,6 +115,7 @@ public class DataPrompt extends JPanel implements MouseListener{
 		}
 
 		play.addMouseListener(this);
+		back.addMouseListener(this);
 		prompt.setVisible(false);
 
         add(banner);
@@ -121,6 +126,7 @@ public class DataPrompt extends JPanel implements MouseListener{
         add(askUsername);
         add(askIPaddress);
         add(askMaxPlayers);
+        add(back);
         add(background);
 	}
 
@@ -184,6 +190,11 @@ public class DataPrompt extends JPanel implements MouseListener{
 				}
 
 			}
+		}
+
+		if(me.getSource()==back){
+			CardLayout cardLayout = (CardLayout)GameGUI.getCards().getLayout();
+			cardLayout.first(GameGUI.getCards());
 		}
 	}
 
