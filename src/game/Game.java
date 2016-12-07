@@ -328,7 +328,6 @@ public class Game extends Canvas implements Runnable {
 
 							System.out.println(inGameData[1]);
 
-							handler.object.clear();
 							send("GAME_IN_ETERNAL_VOID");
 						}
 					}

@@ -77,6 +77,7 @@ public class ChatField extends JPanel{
         ActionListener temp = new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
                 if(messageField.getText().toLowerCase().equals("bye") && GameGUI.isGameOver()){
+                    client.sendMessage(" was disconnected");
                     System.exit(0);
                 }else if(!messageField.getText().equals("")){
                     displayMessage("You: " + messageField.getText() + "\n");
