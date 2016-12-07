@@ -293,8 +293,7 @@ public class Game extends Canvas implements Runnable {
 								GameGUI.updateScores(scoreString);
 							}
 
-						}
-						if(serverData.startsWith("ENDGAME")){
+						}else if(serverData.startsWith("ENDGAME")){
 							ChatField.displayMessage("           = = = GAME END = = =   \n\n");
 						}
 					}
