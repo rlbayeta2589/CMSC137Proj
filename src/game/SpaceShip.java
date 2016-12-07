@@ -21,9 +21,22 @@ public class SpaceShip extends GameObject{
 		this.game = game;
 		this.name = name;
 
+		damage=10;
+		health=250;
+		shield=0;
+
+		dead = false;
+		cooldown = false;
+		shielded = false;
+
+		bullet = 30;
+		checkpoint = 3000;
+
+		points = 0;
+		reward = 1;		
+
 		prevX = x;
 		prevY = y;
-
 	}
 
 	public void tick(LinkedList<GameObject> object){

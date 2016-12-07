@@ -6,9 +6,9 @@ import java.io.*;
 import java.util.*;
 
 public class ChatServer extends Thread{
-    private ServerSocket serverSocket;
     private HashMap<Socket,Thread> clientNodes  = new HashMap<Socket,Thread>();
-    private boolean connected = true;
+    private static ServerSocket serverSocket;
+    private static boolean connected = true;
 
     public ChatServer(int port) throws IOException{
         serverSocket = new ServerSocket(port);
@@ -85,6 +85,12 @@ public class ChatServer extends Thread{
         }
     }
 
+    public static void killAll(){
+        try{
+            connected = false;
+            serverSocket.close();
+        }catch(Exception e){}
+    }
 
 /*    public static void main(String[] args){
         try{

@@ -12,10 +12,13 @@ public class GameGUI extends JFrame{
 	
 	private static StatField statField;
 	private static ChatField chatfield;
+	private static ScoreBoard board;
+	private static GameOverBanner banner_win;
+	private static GameOverBanner banner_lose;
+
 	private static JPanel cards = new JPanel();
 	private static JFrame frame;
 	private static Game game;
-	private static ScoreBoard board;
 	public static String TITLE;
 
 	public GameGUI(String title) throws Exception{
@@ -51,6 +54,8 @@ public class GameGUI extends JFrame{
 
 		game = new Game(username,type,max,servername,port);
 		board = new ScoreBoard();
+		banner_win = new GameOverBanner("WIN");
+		banner_lose = new GameOverBanner("LOSE");
 		chatfield = new ChatField();
 		statField = new StatField(username);
 
@@ -59,10 +64,16 @@ public class GameGUI extends JFrame{
 
 		game.setBounds(-5,0,1000,600);
 		board.setBounds(300,175,400,250);
+		banner_win.setBounds(300,50,400,130);
+		banner_lose.setBounds(300,50,400,130);
 		board.setVisible(false);
+		banner_win.setVisible(false);
+		banner_lose.setVisible(false);
 
 		gamePanel.setOpaque(false);
 		gamePanel.add(board);
+		gamePanel.add(banner_win);
+		gamePanel.add(banner_lose);
 		gamePanel.add(game);
 
 		mainPanel.add(gamePanel,BorderLayout.CENTER);
@@ -71,38 +82,11 @@ public class GameGUI extends JFrame{
 		
 		return mainPanel;
 
-/*		JPanel gamePanel = new JPanel();
-		JPanel westPanel = new JPanel();
+	}
 
-		gamePanel.setLayout(new BorderLayout());
-		westPanel.setLayout(new BorderLayout());
-
-		game = new Game(username,type,max,servername,port);
-		chatfield = new ChatField();
-		statField = new StatField(username);
-
-		westPanel.add(statField, BorderLayout.NORTH);
-		westPanel.add(chatfield, BorderLayout.CENTER);
-
-		gamePanel.add(game,BorderLayout.CENTER);
-		gamePanel.add(westPanel, BorderLayout.WEST);
-		gamePanel.setOpaque(false);
-		
-		return gamePanel;*/
-
-/*		gamePanel.setLayout(null);
-		game = new Game(username,type,max,port);
-		chatfield = new ChatField();
-
-		game.setBounds(0,0,1200,600);
-		chatfield.setBounds(400,370,400,200);
-
-		gamePanel.setOpaque(false);
-
-		gamePanel.add(chatfield);
-		gamePanel.add(game);
-
-		return gamePanel;*/
+	public static void showBanner(String type){
+		if(type.equals("WIN")) banner_win.setVisible(true);
+		else if(type.equals("LOSE")) banner_lose.setVisible(true);
 	}
 
 	public static void showBoard(){
@@ -121,6 +105,10 @@ public class GameGUI extends JFrame{
 		game.requestFocusInWindow();
 	}
 
+	public static boolean isGameOver(){
+		return Game.GAME_OVER;
+	}
+
 	public static Game getGame(){
 		return game;
 	}
@@ -135,6 +123,11 @@ public class GameGUI extends JFrame{
 
 	public static void changeTitle(String title){
 		frame.setTitle(title);
+	}
+
+	public static void killAll(){
+		MainMenu.killAll();
+		Game.killAll();
 	}
 
 	public static void updateCards(String username, String type, int max, String servername,int port) throws Exception{  // this will be used when

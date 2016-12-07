@@ -18,6 +18,7 @@ public class MainMenu extends JPanel implements MouseListener{
 	private static ChatClient client;
 	private static String servername;
 	private static String username;
+	private static String type;
 	private static int maxPlayers;
 	private static final int PORT = 8000;
 
@@ -90,8 +91,20 @@ public class MainMenu extends JPanel implements MouseListener{
 		username = uname;
 	}
 
+	public static void setType(String t){
+		type = t;
+	}
+
 	public Image resizeImage(ImageIcon img, int width, int height){
 		return (img.getImage().getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH));
+	}
+
+	public static void killAll(){
+		ChatClient.killAll();
+		
+		if(type.equals("SERVER")){
+			ChatServer.killAll();
+		}
 	}
 	
 	public static void gameStart(String utype){

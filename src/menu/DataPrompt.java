@@ -174,6 +174,7 @@ public class DataPrompt extends JPanel implements MouseListener{
 				try{
 					
 					MainMenu.setUsername(uname);
+					MainMenu.setType(type);
 					MainMenu.setClientVars(ip,Integer.parseInt(max));
 					MainMenu.gameStart(type);
 				

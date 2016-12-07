@@ -24,6 +24,8 @@ public class KeyInput extends KeyAdapter{
 		if(key==KeyEvent.VK_ENTER){
 			ChatField.focusOnChat();
 		}
+		
+		if(Game.GAME_OVER) return;
 
 		if(key==KeyEvent.VK_TAB){
 			GameGUI.showBoard();
@@ -71,7 +73,7 @@ public class KeyInput extends KeyAdapter{
 	public void keyReleased(KeyEvent ke){
 		int key = ke.getKeyCode();
 
-		if(key==KeyEvent.VK_TAB){
+		if(key==KeyEvent.VK_TAB && !Game.GAME_OVER){
 			GameGUI.hideBoard();
 		}
 

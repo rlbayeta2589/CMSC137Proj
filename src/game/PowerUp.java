@@ -17,6 +17,12 @@ public class PowerUp extends GameObject{
 	public PowerUp(float xpos, float ypos, float velX, Handler handler, ObjectId id, String type, int val){
 		super(xpos,ypos,id);
 
+		dmg = 0;
+		health = 0;
+		shield = 0;
+		speed = 0;
+		value = 0;
+
 		this.y = ypos;
 		this.x = xpos;
 		this.velX = velX;

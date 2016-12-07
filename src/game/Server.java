@@ -8,25 +8,41 @@ public class Server implements Runnable{
 
 	private static final int GAME_START=0;
 	private static final int IN_PROGRESS=1;
-	private final int GAME_END=2;
-	private final int WAITING_FOR_PLAYERS=3;
+	private static final int GAME_END=2;
+	private static final int WAITING_FOR_PLAYERS=3;
 
-    private HashMap<String,Player> players = new HashMap<String,Player>();
-    private Player boss;
-    private DatagramSocket serverSocket = null;
-	private int gameStage=WAITING_FOR_PLAYERS;
-	private boolean connected = false;
-	private String playerData;
-	private int playerCount=0;
-	private int numDeadPlayers = 0;
-	private int numPlayers;
-	private Thread t = new Thread(this);
+    private static DatagramSocket serverSocket = null;
+	private static boolean connected = false, bossIsDead = false;
+    
+    private static HashMap<String,Player> players = new HashMap<String,Player>();
+    private static Player boss;
+	private static int gameStage=WAITING_FOR_PLAYERS;
+	private static String playerData;
+	private static int playerCount=0;
+	private static int numDeadPlayers = 0;
+	private static int numPlayers = 0;
+	private static Thread t;
 
-	private int currX = 100;
-	private int currY = 0;
+	private static int currX = 100;
+	private static int currY = 0;
 
 	public Server(int numPlayers, int port){
 		this.numPlayers = numPlayers;
+		bossIsDead = false;
+		connected = false;
+		bossIsDead = false;
+
+		gameStage=WAITING_FOR_PLAYERS;
+
+		playerCount=0;
+		numDeadPlayers = 0;
+		numPlayers = 0;
+
+		currX = 100;
+		currY = 0;
+
+		t = new Thread(this);
+
 		try {
             serverSocket = new DatagramSocket(port);
 			serverSocket.setSoTimeout(100);
@@ -58,9 +74,31 @@ public class Server implements Runnable{
 		}
 	}
 
-	public void run(){
+	public static void killAll(){
+		connected = false;
+    
+		if(serverSocket!=null){
+			serverSocket.close();
+			serverSocket = null;
+		}
+
+    	players.clear();
+    	boss = null;
+		gameStage=WAITING_FOR_PLAYERS;
+		bossIsDead = false;
+		playerData = "";
+		playerCount = 0;
+		numDeadPlayers = 0;
+		numPlayers = 0;
+
+		currX = 100;
+		currY = 0;
+	}
+
+	public synchronized void run(){
 		connected = true;
 		while(connected){
+
 			byte[] buf = new byte[256];
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			try{
@@ -120,6 +158,17 @@ public class Server implements Runnable{
 
 						if(playerData.equals("")) break;
 
+						if (playerData.startsWith("GAMEOVER_BOSSDEAD")) {
+							bossIsDead = true;
+							gameStage=GAME_END;
+							break;
+						}
+
+						if(numDeadPlayers==numPlayers){
+							gameStage=GAME_END;
+							break;
+						}
+
 						String[] playerInfo = playerData.split(" ");					  
 						String pname = playerInfo[1];
 
@@ -139,6 +188,7 @@ public class Server implements Runnable{
 							inGameData += "#BULLET#" + pname + "#" + x + "#" + y + "#" + damage;
 						}else if(playerData.startsWith("DEAD")){
 							inGameData += "#DEAD#" + pname;
+							numDeadPlayers++;
 						}else if(playerData.startsWith("BARRIER")){
 							inGameData += "#BARRIER#" + pname + "#" + (damage==1?"ON":"OFF");
 						}else if(playerData.startsWith("POWERUP")){
@@ -152,17 +202,33 @@ public class Server implements Runnable{
 							inGameData += "#MAXHEALTH#" + damage;
 						}else if(playerData.startsWith("SCORE")){
 							inGameData += "#SCORE#" + pname + "#" + damage;
-						}else if (playerData.startsWith("BOSSDEAD")) {
-							broadcast("ENDGAME");
-							System.out.println("BOSS DEAD");
-						}else if(numDeadPlayers == playerCount){
-							broadcast("ENDGAME");
-							System.out.println("PLAYERS DEAD");
 						}
 
 						broadcast(inGameData);
 						break;
+
+				  case GAME_END:
+
+				  		if(numDeadPlayers==numPlayers){
+				  			broadcast("GAME_OVER#LOSE");
+				  		}else if(bossIsDead){
+				  			broadcast("GAME_OVER#WIN");
+				  		}else{
+				  			broadcast("GAME_OVER#LOSE");
+				  		}
+
+
+				  		if(playerData.startsWith("GAME_IN_ETERNAL_VOID")){
+				  			connected = false;
+				  			break;
+				  		}
+
+				  		break;
 			}				  
 		}
+
+		serverSocket.close();
+		serverSocket = null;
+		killAll();
 	}	
 }

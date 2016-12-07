@@ -76,7 +76,9 @@ public class ChatField extends JPanel{
     private ActionListener createMessageAction(){
         ActionListener temp = new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
-                if(!messageField.getText().equals("")){
+                if(messageField.getText().toLowerCase().equals("bye") && GameGUI.isGameOver()){
+                    System.exit(0);
+                }else if(!messageField.getText().equals("")){
                     displayMessage("You: " + messageField.getText() + "\n");
                          
                     client.sendMessage(messageField.getText());

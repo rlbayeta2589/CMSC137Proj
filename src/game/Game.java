@@ -14,20 +14,22 @@ import java.util.*;
 public class Game extends Canvas implements Runnable {
 
 	public static int WIDTH, HEIGHT;
+	public static boolean GAME_OVER = false;
 
-	private static HashMap<String,SpaceShip> spaceships = new HashMap<String,SpaceShip>();
-	private static HashMap<String,Integer> scores = new HashMap<String,Integer>();
+	private static HashMap<String,SpaceShip> spaceships;
+	private static HashMap<String,Integer> scores;
 	private static Boss boss;
 
 	private ImageIcon background;
-	private boolean running = false;
 	private Thread thread;
 	private Thread client;
 
-    private DatagramSocket socket;
+    private static DatagramSocket socket;
+	private static boolean connected = false;
+	private static boolean running = false;
+	
+	private static String serverData;
 	private String server="localhost";
-	private boolean connected = false;
-	private String serverData;
 	private int PORT;
 
 	public String name = "";
@@ -48,9 +50,12 @@ public class Game extends Canvas implements Runnable {
 		server = servername;
 		PORT = port;
 
+		spaceships = new HashMap<String,SpaceShip>();
+		scores = new HashMap<String,Integer>();
+	
 		try{
 			socket = new DatagramSocket();
-				socket.setSoTimeout(100);
+			socket.setSoTimeout(100);
 		}catch(Exception e){
 			System.out.println("ERROR");
 		}
@@ -145,12 +150,27 @@ public class Game extends Canvas implements Runnable {
 			byte[] buf = msg.getBytes();
         	InetAddress address = InetAddress.getByName(server);
         	DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 8000);
-        	socket.send(packet);
+        	
+        	if(!GAME_OVER) socket.send(packet);
         }catch(Exception e){}
 	}
 
-	public static void printScores(){
-		
+	public static void killAll(){
+		running = false;
+
+		if(socket!=null){
+			socket.close();
+			socket = null;
+		}
+
+		serverData = "";
+		spaceships.clear();
+		scores.clear();
+		GAME_OVER = false;
+		connected = false;
+		running = false;
+
+		Server.killAll();
 	}
 
     private Thread createClientReceiver(){
@@ -158,14 +178,15 @@ public class Game extends Canvas implements Runnable {
         Thread receiver = new Thread() {
 
             public synchronized void run(){
-				while(true){
+				while(!GAME_OVER){
 					
 					byte[] buf = new byte[256];
 					DatagramPacket packet = new DatagramPacket(buf, buf.length);
 					try{
-		     			socket.receive(packet);
+		     			if(!GAME_OVER) socket.receive(packet);
 					}catch(Exception ioe){}
 					
+					serverData="";
 					serverData=new String(buf);
 					serverData=serverData.trim();
 
@@ -293,11 +314,28 @@ public class Game extends Canvas implements Runnable {
 								GameGUI.updateScores(scoreString);
 							}
 
-						}else if(serverData.startsWith("ENDGAME")){
-							ChatField.displayMessage("           = = = GAME END = = =   \n\n");
+						}else if(serverData.startsWith("GAME_OVER")){
+							String[] inGameData = serverData.split("#");
+							GAME_OVER = true;
+
+
+
+							System.out.println("GAME_OVER");
+							ChatField.displayMessage("           = = =  GAME END  = = =   \n");
+							ChatField.displayMessage("    -     Enter \"BYE\" to Exit Game   -   \n\n");
+							GameGUI.showBoard();
+							GameGUI.showBanner(inGameData[1]);
+
+							System.out.println(inGameData[1]);
+
+							handler.object.clear();
+							send("GAME_IN_ETERNAL_VOID");
 						}
 					}
 	            }
+
+	            socket.close();
+				socket = null;
 			}
         };
 

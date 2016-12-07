@@ -6,9 +6,9 @@ import java.util.*;
 
 public class ChatClient extends Thread{
 
-    private boolean connected = true;
+    private static boolean connected = true;
+    private static Socket client;
     private String username;
-    private Socket client;
 
     public ChatClient(String serverName, String username, int port){
 
@@ -51,6 +51,13 @@ public class ChatClient extends Thread{
         }catch(Exception e){
             System.out.println("  ERROR || send message to server");
         }
+    }
+
+    public static void killAll(){
+        try{
+            connected = false;
+            client.close();
+        }catch(Exception e){}
     }
 
 

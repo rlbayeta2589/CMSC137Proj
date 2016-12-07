@@ -30,17 +30,17 @@ public class ScoreBoard extends JPanel{
 
 		setBackground(Color.BLACK);
 
-		user1 = new JLabel("-----", SwingConstants.CENTER);
-		user2 = new JLabel("-----", SwingConstants.CENTER);
-		user3 = new JLabel("-----", SwingConstants.CENTER);
-		user4 = new JLabel("-----", SwingConstants.CENTER);
-		user5 = new JLabel("-----", SwingConstants.CENTER);
+		user1 = new JLabel("", SwingConstants.CENTER);
+		user2 = new JLabel("", SwingConstants.CENTER);
+		user3 = new JLabel("", SwingConstants.CENTER);
+		user4 = new JLabel("", SwingConstants.CENTER);
+		user5 = new JLabel("", SwingConstants.CENTER);
 		
-		score1 = new JLabel("00000", SwingConstants.CENTER);
-		score2 = new JLabel("00000", SwingConstants.CENTER);
-		score3 = new JLabel("00000", SwingConstants.CENTER);
-		score4 = new JLabel("00000", SwingConstants.CENTER);
-		score5 = new JLabel("00000", SwingConstants.CENTER);
+		score1 = new JLabel("", SwingConstants.CENTER);
+		score2 = new JLabel("", SwingConstants.CENTER);
+		score3 = new JLabel("", SwingConstants.CENTER);
+		score4 = new JLabel("", SwingConstants.CENTER);
+		score5 = new JLabel("", SwingConstants.CENTER);
 
 		ImageIcon image = new ImageIcon("./src/img/scoreBoard.png");
 		Image img = Util.resizeImage(image, 400, 250);

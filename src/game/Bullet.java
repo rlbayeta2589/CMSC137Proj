@@ -17,7 +17,7 @@ public class Bullet extends GameObject{
 		super(x,y,id);
 		this.name = name;
 		this.velX = velX;
-		this.damage = dmg;
+		this.damage = 1672;
 		this.game = game;
 		this.handler = handler;
 

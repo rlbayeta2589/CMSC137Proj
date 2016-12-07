@@ -27,6 +27,15 @@ public class Boss extends GameObject{
 		this.regen = (int)(orig_health*0.002);
 		this.damage = 50;
 
+		animate_count=0;
+		frame_no=1;
+		accumulated = 0;
+		timer = null;
+
+		moving = false;
+		dead = false;
+		pspawnCD = false;
+
 		if(utype=="SERVER"){
 			Thread movement = createMovements();
 			movement.start();
@@ -83,7 +92,7 @@ public class Boss extends GameObject{
         Thread movement = new Thread() {
             public void run(){
 				Handler hand = game.getHandler();
-            	while(health > 0){
+            	while(health > 0 && !Game.GAME_OVER){
             		health+=regen;
         			orig_health++;
 
@@ -227,13 +236,12 @@ public class Boss extends GameObject{
 						timer.setRepeats(false);
 						timer.stop();
 						game.getHandler().removeObject(temp);
+						game.send("GAMEOVER_BOSSDEAD");
 					}
 				}
 			});
 			timer.setRepeats(true);
-			timer.start();
-			
-			game.send("BOSSDEAD");
+			timer.start();			
 		}
 	}
 
