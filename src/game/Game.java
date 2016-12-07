@@ -54,7 +54,8 @@ public class Game extends Canvas implements Runnable {
 		}catch(Exception e){
 			System.out.println("ERROR");
 		}
-
+		
+		setFocusTraversalKeysEnabled(false);
 		setPreferredSize(new Dimension(1200, 600));
 	}
 
@@ -286,9 +287,10 @@ public class Game extends Canvas implements Runnable {
 									scores.put(uname,point);
 								}
 
-								String x = Util.entriesSortedByValues(scores).toString();
-								x = x.substring(1, x.length() - 1);
-								System.out.println(x);
+								String scoreString = Util.entriesSortedByValues(scores).toString();
+								scoreString = scoreString.substring(1, scoreString.length() - 1);
+
+								GameGUI.updateScores(scoreString);
 							}
 
 						}

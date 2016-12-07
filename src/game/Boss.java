@@ -94,7 +94,7 @@ public class Boss extends GameObject{
 
 					if(health<(orig_health*0.15)){
 						int chance = random.nextInt(100) + 1;
-						regen = (int)(orig_health*0.025);
+						regen = (int)(orig_health*0.035);
 
 						if(chance>=80 && chance<=85){
 							health += (int)(orig_health*0.25);
@@ -146,18 +146,18 @@ public class Boss extends GameObject{
 						game.send("BOSSBULLET BULLET "+x+" "+bulletStart+" "+damage);
 
 						if(health<(orig_health*0.80)){
-							hand.addObject(new BossBullet(x+40,y,hand,ObjectId.BossBullet,damage));
-							hand.addObject(new BossBullet(x+40,y+height,hand,ObjectId.BossBullet,damage));
-							game.send("BOSSBULLET BULLET "+(x+40)+" "+y+" "+damage);
-							game.send("BOSSBULLET BULLET "+(x+40)+" "+(y+height)+" "+damage);
+							hand.addObject(new BossBullet(x+40,y,hand,ObjectId.BossBullet,damage+15));
+							hand.addObject(new BossBullet(x+40,y+height,hand,ObjectId.BossBullet,damage+15));
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+y+" "+(damage+15));
+							game.send("BOSSBULLET BULLET "+(x+40)+" "+(y+height)+" "+(damage+15));
 						}
 
 
 						if(health<(orig_health*0.40)){
-							hand.addObject(new BossBullet(x+20,bulletStart+(height/4),hand,ObjectId.BossBullet,damage));
-							hand.addObject(new BossBullet(x+20,bulletStart-(height/4),hand,ObjectId.BossBullet,damage));
-							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart+(height/4))+" "+damage);
-							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart-(height/4))+" "+damage);
+							hand.addObject(new BossBullet(x+20,bulletStart+(height/4),hand,ObjectId.BossBullet,damage+30));
+							hand.addObject(new BossBullet(x+20,bulletStart-(height/4),hand,ObjectId.BossBullet,damage+30));
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart+(height/4))+" "+(damage+30));
+							game.send("BOSSBULLET BULLET "+(x+20)+" "+(bulletStart-(height/4))+" "+(damage+30));
 						}
 
 
@@ -202,8 +202,8 @@ public class Boss extends GameObject{
 		if(accumulated>=1000){
 			accumulated -= 1000;
 			damage+=50;
-			orig_health+=100;
-			health+=50;
+			orig_health+=200;
+			health+=100;
 			
 			game.send("BUFF BOSS 0 0 "+damage);
 			game.send("REGEN BOSS 0 0 "+health);

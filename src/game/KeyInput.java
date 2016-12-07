@@ -1,5 +1,6 @@
 package src.game;
 
+import src.GameGUI;
 import src.chat.*;
 
 import java.awt.*;
@@ -22,6 +23,10 @@ public class KeyInput extends KeyAdapter{
 
 		if(key==KeyEvent.VK_ENTER){
 			ChatField.focusOnChat();
+		}
+
+		if(key==KeyEvent.VK_TAB){
+			GameGUI.showBoard();
 		}
 
 		for(int i=0; i<handler.object.size(); i++){
@@ -65,6 +70,10 @@ public class KeyInput extends KeyAdapter{
 
 	public void keyReleased(KeyEvent ke){
 		int key = ke.getKeyCode();
+
+		if(key==KeyEvent.VK_TAB){
+			GameGUI.hideBoard();
+		}
 
 		for(GameObject tempObject : handler.object){
 			if(tempObject.getId() == ObjectId.SpaceShip){

@@ -15,6 +15,7 @@ public class GameGUI extends JFrame{
 	private static JPanel cards = new JPanel();
 	private static JFrame frame;
 	private static Game game;
+	private static ScoreBoard board;
 	public static String TITLE;
 
 	public GameGUI(String title) throws Exception{
@@ -49,6 +50,7 @@ public class GameGUI extends JFrame{
 		westPanel.setLayout(new BorderLayout());
 
 		game = new Game(username,type,max,servername,port);
+		board = new ScoreBoard();
 		chatfield = new ChatField();
 		statField = new StatField(username);
 
@@ -56,8 +58,11 @@ public class GameGUI extends JFrame{
 		westPanel.add(chatfield, BorderLayout.CENTER);
 
 		game.setBounds(-5,0,1000,600);
+		board.setBounds(300,175,400,250);
+		board.setVisible(false);
 
 		gamePanel.setOpaque(false);
+		gamePanel.add(board);
 		gamePanel.add(game);
 
 		mainPanel.add(gamePanel,BorderLayout.CENTER);
@@ -98,6 +103,18 @@ public class GameGUI extends JFrame{
 		gamePanel.add(game);
 
 		return gamePanel;*/
+	}
+
+	public static void showBoard(){
+		board.setVisible(true);
+	}
+
+	public static void hideBoard(){
+		board.setVisible(false);
+	}
+
+	public static void updateScores(String data){
+		ScoreBoard.updateData(data);
 	}
 
 	public static void focusOnGame(){
